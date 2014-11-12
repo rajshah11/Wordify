@@ -1,0 +1,388 @@
+<!--
+Introduction to Computer Graphics | Fall 2014 | IIT Gandhinagar
+Pankaj Gautam [11110060]
+Parth Sane [11110063]
+Raj Shah [11110077]
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Wordify</title>
+    <!--Title of the HTML page-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <div id="main"></div>
+	<div id="clock"></div>
+	<div id="score"></div>
+	<div id="wordlist"></div>
+    <!--Creating an HTML division-->
+    <style>
+    body {
+        font-family: Monospace;
+        background-color: #f0f0f0;
+        margin: 0px;
+        overflow: hidden;
+    }
+    #main {
+        background-color: #f0f0f0;
+        overflow: hidden;
+        position: static;
+    }
+	#wordlist {
+	overflow: auto;
+	}
+	   </style>
+</head>
+
+<body>
+    <script>
+    document.getElementById("main").style.height = window.innerHeight + "px"; //Set the height of the main division
+    document.getElementById("main").style.width = window.innerWidth + "px"; //Set the width of the main division
+    document.getElementById("main").style.top = "0px"; //Position of the main divison
+    document.getElementById("main").style.left = "0px";
+	document.getElementById("clock").style.height = "100px"; //Set the height of the main division
+    document.getElementById("clock").style.width = "150px"; //Set the width of the main division
+    document.getElementById("clock").style.top = "10px"; //Position of the main divison
+    document.getElementById("clock").style.left = window.innerWidth-150-10 + "px";
+	document.getElementById("clock").style.backgroundColor = 'white'
+	document.getElementById("clock").style.opacity = "0.7"
+	document.getElementById("clock").style.position = 'absolute'
+	document.getElementById("score").style.height = "100px"; //Set the height of the main division
+    document.getElementById("score").style.width = "150px"; //Set the width of the main division
+    document.getElementById("score").style.top = "120px"; //Position of the main divison
+    document.getElementById("score").style.left = window.innerWidth-150-10 + "px";
+	document.getElementById("score").style.backgroundColor = 'white'
+	document.getElementById("score").style.opacity = "0.7"
+	document.getElementById("score").style.position = 'absolute'
+	document.getElementById("wordlist").style.height = "425px"; //Set the height of the main division
+	document.getElementById("wordlist").style.width = "150px"; //Set the width of the main division
+    document.getElementById("wordlist").style.top = "230px"; //Position of the main divison
+    document.getElementById("wordlist").style.left = window.innerWidth-150-10 + "px";
+	document.getElementById("wordlist").style.backgroundColor = 'white'
+	document.getElementById("wordlist").style.opacity = "0.7"
+	document.getElementById("wordlist").style.position = 'absolute'
+    </script>
+
+    <!--Including all the javascript source files used-->
+    <script src="three.js"></script>
+    <script src="./gameCube.js"></script>
+    <script src="./cubeTexture.js"></script>
+    <script src="js/controls/TrackballControls.js"></script>
+    <script src="js/libs/stats.min.js"></script>
+	<script src="BJSpell.js"></script>
+	<script src="jquery-1.9.1.js"></script>
+
+    <script>
+	 //Adding a looking mechanism
+    THREE.Utils = {
+    cameraLookDir: function(camera) {
+        var vector = new THREE.Vector3(0, 0, -1);
+        vector.applyEuler(camera.rotation, camera.eulerOrder);
+        return vector;
+    }
+	};
+    var mainElement;
+    var camera, scene, projector, controls, renderer, plane, allCubes, mouse = new THREE.Vector2();
+    var INT = false,	//Boolean variable used for representing intersections
+        intCube, intCube1;
+    var word = [];
+    var plane;
+    var camvec = new THREE.Vector3();
+	var dictionary = new BJSpell("en_US.js");
+	var secondscounter=120, minutecounter=2, totalpoints=0;
+	var startGame = 0;
+    function randLetter() { //Function to return a random letter
+        var letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
+        return letters.substr(Math.floor(Math.random() * 98), 1);
+    }
+	
+    init(); //Calling the init and animate functions
+    animate();
+	pausescreen();
+
+    function pausescreen(){
+        	if(!startGame){
+        	camvec.copy(camera.position);
+        	camvec.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750)	);
+        	camvec.sub(plane.position);
+        	camvec.multiplyScalar(0.3);
+			plane.position.add(camvec);
+    	    plane.lookAt(camera)
+    	}
+    	else {
+			camvec.copy(camera.position);
+        	camvec.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(5000)	);
+        	camvec.sub(plane.position);
+        	camvec.multiplyScalar(0.003);
+			plane.position.add(camvec);
+    	    plane.lookAt(camera);
+    	}
+    }
+	
+    function init() {
+        mainElement = document.getElementById("main"); //Get element "main"
+        document.body.appendChild(mainElement);
+  var clockElement = document.getElementById("clock");
+  document.body.appendChild(clockElement);
+  addtext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+    var scoreElement = document.getElementById("score");
+  document.body.appendChild(scoreElement);
+      var wordlistElement = document.getElementById("wordlist");
+  document.body.appendChild(wordlistElement);
+        camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
+        camera.position.z = 250;
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+
+        controls = new THREE.TrackballControls(camera); //Initializing TrackballControls (it uses TrackballControls.js) 
+        controls.rotateSpeed = 7;
+        controls.zoomSpeed = 4;
+        controls.panSpeed = 1;
+        controls.staticMoving = true;
+
+
+
+        var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.12); // Create a hemispherical light to show the MeshPhongMaterial objects
+
+        scene = new THREE.Scene(); //Initializing the scene
+
+        var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
+        allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
+		        var hud1geom = new THREE.PlaneGeometry(window.innerWidth,window.innerHeight);
+        var hud1mat = new THREE.MeshPhongMaterial( {map: generateplaneTexture(0.40*window.innerWidth,0.50*window.innerHeight)} );
+        plane = new THREE.Mesh( hud1geom, hud1mat );
+//        var tempvar = new THREE.Vector3();
+        camera.rotation.eulerOrder = 'XZY';
+        plane.rotation.eulerOrder = 'XZY';
+
+        plane.position.copy(camera.position);
+		plane.position.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750));
+        plane.lookAt(camera)
+        scene.add( plane );
+		
+        var i;
+        for (i = 0; i < 100; i++) { //Generate 100 random cubes
+            var letter = randLetter(); //Get a letter using randLetter function
+
+            //Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
+            var material = new THREE.MeshPhongMaterial({
+                map: generateTexture(letter)
+            });
+
+            //Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
+            var cube = new MyGameCube(geom, material);
+
+            cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
+            cube.position.y = (-Math.random() + 0.5) * 150;
+            cube.position.z = (-Math.random() + 0.5) * 150;
+
+            cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
+            cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
+            cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
+
+            cube.letter = letter; //Assign the letter to this cube
+            allCubes.add(cube); //Add the cube to allCubes
+        }
+        //scene.add(allCubes); //Add allCubes to the scene
+        scene.add(light); //Add light to the scene
+
+        projector = new THREE.Projector(); //Create a new projector
+
+        renderer = new THREE.WebGLRenderer({
+            antialias: true
+        }); //Create a new renderer
+        renderer.setClearColor(0xF0F0FF); //Set the renderer color
+        renderer.setSize(window.innerWidth, window.innerHeight); //Set the renderer size
+
+        mainElement.appendChild(renderer.domElement); //Append the renderer element to the main element
+
+        stats = new Stats(); //Create a stats object using Stats function in Stats.js
+        stats.domElement.style.position = 'absolute';
+        stats.domElement.style.top = '0px';
+        mainElement.appendChild(stats.domElement); //Append the stats element to the main element
+		
+        renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false); //Add Mouse Move event listener
+        renderer.domElement.addEventListener('click', onDocumentMouseDown, false);
+        window.addEventListener('keydown', onDocumentKeyDown, false); //Add Key Down event listener
+        window.addEventListener('resize', onWindowResize, false);
+		var mytimer = window.setInterval(function(){timer()}, 1000);
+    }
+
+    function onDocumentMouseMove(event) {
+        event.preventDefault();
+        //Mouse Position
+        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
+        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
+
+
+        var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5); //Mouse Vector
+        projector.unprojectVector(mousevect, camera); //Unproject mouse vector using camera
+        //Cast a ray from camera position towards mouse position 
+        var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
+        var intersects = raycaster.intersectObjects(allCubes.children); //Get an array of objects that intersect the ray
+
+        allCubes.children.forEach(function(cube) {
+            if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+        }); //Update the color of the cubes 
+
+        if (intersects.length > 0 && !intersects[0].object.isSelected) {
+
+            intersects[0].object.material.color.setHex(0xC7F464); //Change the color of the nearest intersecting cube
+            mainElement.style.cursor = 'pointer'; //Change the mouse pointer
+            INT = true;
+            intCube = intersects[0].object; //Assign first cube to intCube
+        } else {
+            INT = false;
+            mainElement.style.cursor = 'auto';
+        }
+
+    }
+
+    function onDocumentMouseDown(event) {
+        event.preventDefault();
+        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
+        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
+
+        var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+        projector.unprojectVector(mousevect, camera);
+        var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
+        var intersects = raycaster.intersectObjects(allCubes.children);
+
+        if (intersects.length > 0) {
+            intCube = intersects[0].object;
+            if (!intCube.isSelected) {
+                intersects[0].object.material.color.setHex(0xC44D58); //Change color on Selection
+                intersects[0].object.material.opacity = 1.5;
+                mainElement.style.cursor = 'pointer';
+                INT = false;
+                intCube.isSelected = 1; //Change the selected flag on selection
+                word.push(intCube); //Push the selected cubes to a dynamic array
+                console.log(intCube.letter);
+                console.log(intCube.points());
+            }
+        }
+
+    }
+
+    function onDocumentKeyDown(event) {
+	        if(event.keyCode == 81){
+        	scene.add(allCubes);
+        	startGame = !startGame;
+        }
+        if (event.keyCode == 80){
+        	startGame = !startGame;
+        	if(!startGame){
+        		scene.remove(allCubes);
+        	}
+        	else{
+	        	scene.add(allCubes);
+        	}
+        	
+        }
+        else if (event.keyCode == 86){
+
+            allCubes.visible = !allCubes.visible;
+        }
+        else if (event.keyCode == 13) { //Keycode for Enter
+            var currentWord = '';
+            var totpot = 0;
+            for (i = 0; i < word.length; i++) {
+                //Extract the letters and points from the selected cubes to create a word and calculate the total points 
+                currentWord = currentWord + word[i].letter;
+                totpot = totpot + word[i].points();
+            }
+			if (dictionary.check(currentWord.toLowerCase()) && currentWord.length>2){
+			for (i = 0; i < word.length; i++) {
+			allCubes.remove(word[i]);
+			}
+			totalpoints=totalpoints+totpot*currentWord.length*currentWord.length;
+			addtext("score", totalpoints);
+			addword("wordlist",currentWord);
+			//alert("Word:" + currentWord + "  Points:" + totpot); //Show the extracted word and total points
+			}
+			else{
+			for (i = 0; i < word.length; i++) {
+                //Deselect the selected cubes
+                word[i].isSelected = 0;
+            }
+            while (word.length != 0) {
+                word.pop(); //Reset the dynamic array
+            }
+            allCubes.children.forEach(function(cube) {
+                if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+            }); //Update the color
+			alert("Invalid Word");
+			}
+            while (word.length != 0) {
+                word.pop(); //Reset the dynamic array
+            }
+
+        }
+        if (event.keyCode == 8) { //Keycode for Backspace
+            for (i = 0; i < word.length; i++) {
+                //Deselect the selected cubes
+                word[i].isSelected = 0;
+            }
+            while (word.length != 0) {
+                word.pop(); //Reset the dynamic array
+            }
+            allCubes.children.forEach(function(cube) {
+                if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+            }); //Update the color
+        }
+    }
+	
+	function addtext(element, text){
+	    var myelement = document.getElementById(element);
+		myelement.innerText = text;
+	}
+	function addword(element, text){
+	    var myelement = document.getElementById(element);
+		myelement.innerText =myelement.innerText +"\n"+ text;
+	}
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+	function timer() {
+	if (minutecounter!=0 || secondscounter!=0) 
+	{
+	if ( (secondscounter%60) == 0) {
+    minutecounter = minutecounter - 1;}
+	secondscounter = secondscounter - 1;
+	addtext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+	}
+	else window.clearInterval(mytimer);
+	}
+    function animate() { //Animate function
+
+        requestAnimationFrame(animate);
+
+        render();
+        stats.update(); //Update the stats
+
+    }
+
+    function render() {
+		pausescreen();
+		plane.rotation.x = camera.rotation.x;
+        plane.rotation.y = camera.rotation.y;
+        plane.rotation.z = camera.rotation.z;
+        controls.update(); //Update the controls
+        renderer.render(scene, camera); //Render the scene and camera
+        if (INT) { //Rotate the cube on intersection
+            intCube.rotation.x += 0.05;
+            intCube.rotation.y += 0.02;
+            intCube.rotation.z += 0.03;
+        }
+    }
+    </script>
+
+</body>
+
+</html>
