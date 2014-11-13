@@ -14,9 +14,11 @@ Raj Shah [11110077]
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <div id="main"></div>
-	<div id="clock"></div>
+	<div id="clock">
+	</div>
 	<div id="score"></div>
 	<div id="wordlist"></div>
+	<button type="button" id="startbutton">START</button>
     <!--Creating an HTML division-->
     <style>
     body {
@@ -63,6 +65,13 @@ Raj Shah [11110077]
 	document.getElementById("wordlist").style.backgroundColor = 'white'
 	document.getElementById("wordlist").style.opacity = "0.7"
 	document.getElementById("wordlist").style.position = 'absolute'
+	document.getElementById("startbutton").style.height = "50px"; //Set the height of the main division
+	document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
+    document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
+    document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
+	document.getElementById("startbutton").style.backgroundColor = 'white'
+	document.getElementById("startbutton").style.opacity = "0.7"
+	document.getElementById("startbutton").style.position = 'absolute'
     </script>
 
     <!--Including all the javascript source files used-->
@@ -73,7 +82,9 @@ Raj Shah [11110077]
     <script src="js/libs/stats.min.js"></script>
 	<script src="BJSpell.js"></script>
 	<script src="jquery-1.9.1.js"></script>
-
+		<script src="fonts/optimer_bold.typeface.js"></script>
+		<script src="fonts/optimer_regular.typeface.js"></script>
+		
     <script>
 	 //Adding a looking mechanism
     THREE.Utils = {
@@ -88,8 +99,7 @@ Raj Shah [11110077]
     var INT = false,	//Boolean variable used for representing intersections
         intCube, intCube1;
     var word = [];
-    var plane;
-    var camvec = new THREE.Vector3();
+    var camvec = new THREE.Vector3(),r=0;
 	var dictionary = new BJSpell("en_US.js");
 	var secondscounter=120, minutecounter=2, totalpoints=0;
 	var startGame = 0;
@@ -98,11 +108,21 @@ Raj Shah [11110077]
         return letters.substr(Math.floor(Math.random() * 98), 1);
     }
 	
+			var material1 = new THREE.MeshPhongMaterial({color: 0x000000});
+		var textgeom = new THREE.TextGeometry('wordify',{size:50, height:25,
+							curveSegments:4, font:"optimer", weight:"bold",
+							style:"normal"});
+		 var textMesh = new THREE.Mesh( textgeom, material1 );
+    textgeom.computeBoundingBox();
+    var textWidth = textgeom.boundingBox.max.x - textgeom.boundingBox.min.x;
+    textMesh.position.set( 0-0.5*textWidth,0, -100 );
+	
+	
     init(); //Calling the init and animate functions
     animate();
-	pausescreen();
+	//pausescreen();
 
-    function pausescreen(){
+    /*function pausescreen(){
         	if(!startGame){
         	camvec.copy(camera.position);
         	camvec.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750)	);
@@ -119,18 +139,22 @@ Raj Shah [11110077]
 			plane.position.add(camvec);
     	    plane.lookAt(camera);
     	}
-    }
+    }*/
 	
     function init() {
         mainElement = document.getElementById("main"); //Get element "main"
         document.body.appendChild(mainElement);
   var clockElement = document.getElementById("clock");
   document.body.appendChild(clockElement);
-  addtext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+  addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
     var scoreElement = document.getElementById("score");
   document.body.appendChild(scoreElement);
+ document.getElementById("score").innerText = "SCORE"+"\n"+"0";
       var wordlistElement = document.getElementById("wordlist");
   document.body.appendChild(wordlistElement);
+  document.getElementById("wordlist").innerText = "WORDS"
+    document.body.appendChild(wordlistElement);
+  var sbuttonElement = document.getElementById("startbutton");
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -141,8 +165,7 @@ Raj Shah [11110077]
         controls.zoomSpeed = 4;
         controls.panSpeed = 1;
         controls.staticMoving = true;
-
-
+		controls.enabled=false;
 
         var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.12); // Create a hemispherical light to show the MeshPhongMaterial objects
 
@@ -150,7 +173,7 @@ Raj Shah [11110077]
 
         var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
         allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
-		        var hud1geom = new THREE.PlaneGeometry(window.innerWidth,window.innerHeight);
+/*		        var hud1geom = new THREE.PlaneGeometry(window.innerWidth,window.innerHeight);
         var hud1mat = new THREE.MeshPhongMaterial( {map: generateplaneTexture(0.40*window.innerWidth,0.50*window.innerHeight)} );
         plane = new THREE.Mesh( hud1geom, hud1mat );
 //        var tempvar = new THREE.Vector3();
@@ -161,7 +184,13 @@ Raj Shah [11110077]
 		plane.position.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750));
         plane.lookAt(camera)
         scene.add( plane );
-		
+*/		
+		var smaterial = new THREE.MeshPhongMaterial({
+                map: generateStartTexture()
+            });
+			
+			var startcube = new MyGameCube(geom, smaterial);
+			scene.add(startcube);
         var i;
         for (i = 0; i < 100; i++) { //Generate 100 random cubes
             var letter = randLetter(); //Get a letter using randLetter function
@@ -186,6 +215,9 @@ Raj Shah [11110077]
             allCubes.add(cube); //Add the cube to allCubes
         }
         //scene.add(allCubes); //Add allCubes to the scene
+		
+
+		scene.add(textMesh);
         scene.add(light); //Add light to the scene
 
         projector = new THREE.Projector(); //Create a new projector
@@ -207,7 +239,15 @@ Raj Shah [11110077]
         renderer.domElement.addEventListener('click', onDocumentMouseDown, false);
         window.addEventListener('keydown', onDocumentKeyDown, false); //Add Key Down event listener
         window.addEventListener('resize', onWindowResize, false);
-		var mytimer = window.setInterval(function(){timer()}, 1000);
+		  sbuttonElement.onclick = function(){
+  	        if(startGame==0){
+			controls.enabled = true;
+			startGame = !startGame;
+			sbuttonElement.remove();
+        	scene.add(allCubes);
+			var mytimer = window.setInterval(function(){timer()}, 1000);
+        }
+  }
     }
 
     function onDocumentMouseMove(event) {
@@ -215,7 +255,6 @@ Raj Shah [11110077]
         //Mouse Position
         mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
         mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
-
 
         var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5); //Mouse Vector
         projector.unprojectVector(mousevect, camera); //Unproject mouse vector using camera
@@ -244,7 +283,7 @@ Raj Shah [11110077]
         event.preventDefault();
         mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
         mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
-
+	
         var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5);
         projector.unprojectVector(mousevect, camera);
         var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
@@ -267,10 +306,6 @@ Raj Shah [11110077]
     }
 
     function onDocumentKeyDown(event) {
-	        if(event.keyCode == 81){
-        	scene.add(allCubes);
-        	startGame = !startGame;
-        }
         if (event.keyCode == 80){
         	startGame = !startGame;
         	if(!startGame){
@@ -297,8 +332,11 @@ Raj Shah [11110077]
 			for (i = 0; i < word.length; i++) {
 			allCubes.remove(word[i]);
 			}
-			totalpoints=totalpoints+totpot*currentWord.length*currentWord.length;
-			addtext("score", totalpoints);
+			if (currentWord.length>=3 && currentWord.length<=5) totalpoints=totalpoints+totpot*50;
+			else if (currentWord.length>=6 && currentWord.length<=8) totalpoints=totalpoints+totpot*75;
+			else if  (currentWord.length>=9 && currentWord.length<=10) totalpoints=totalpoints+totpot*100;
+			else if (currentWord.length>10) totalpoints=totalpoints+totpot*125
+			addscoretext("score", totalpoints);
 			addword("wordlist",currentWord);
 			//alert("Word:" + currentWord + "  Points:" + totpot); //Show the extracted word and total points
 			}
@@ -334,9 +372,13 @@ Raj Shah [11110077]
         }
     }
 	
-	function addtext(element, text){
+	function addclocktext(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText = text;
+		myelement.innerText = "TIME"+"\n"+text;
+	}
+		function addscoretext(element, text){
+	    var myelement = document.getElementById(element);
+		myelement.innerText = "SCORE"+"\n"+text;
 	}
 	function addword(element, text){
 	    var myelement = document.getElementById(element);
@@ -355,9 +397,13 @@ Raj Shah [11110077]
 	if ( (secondscounter%60) == 0) {
     minutecounter = minutecounter - 1;}
 	secondscounter = secondscounter - 1;
-	addtext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+	addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
 	}
-	else window.clearInterval(mytimer);
+	else {
+	scene.remove(allCubes);
+	var mytimer = window.setInterval(function(){timer()}, 1000);
+	window.clearInterval(mytimer);
+	}
 	}
     function animate() { //Animate function
 
@@ -369,12 +415,16 @@ Raj Shah [11110077]
     }
 
     function render() {
-		pausescreen();
-		plane.rotation.x = camera.rotation.x;
+		//pausescreen();
+		/*plane.rotation.x = camera.rotation.x;
         plane.rotation.y = camera.rotation.y;
-        plane.rotation.z = camera.rotation.z;
+        plane.rotation.z = camera.rotation.z;*/
         controls.update(); //Update the controls
         renderer.render(scene, camera); //Render the scene and camera
+		if (r<=125) {
+		textMesh.position.set( 0-0.5*textWidth,0, -1000+10*r );
+		r=r+1;}
+		else scene.remove(textMesh);
         if (INT) { //Rotate the cube on intersection
             intCube.rotation.x += 0.05;
             intCube.rotation.y += 0.02;
