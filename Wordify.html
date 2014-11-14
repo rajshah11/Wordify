@@ -140,7 +140,7 @@ void main() {
         return letters.substr(Math.floor(Math.random() * 98), 1);
     }
 	
-			var material1 = new THREE.MeshPhongMaterial({color: 0x000000});
+			var material1 = new THREE.MeshPhongMaterial({color: 0xffffff});
 		var textgeom = new THREE.TextGeometry('wordify',{size:50, height:25,
 							curveSegments:4, font:"optimer", weight:"bold",
 							style:"normal"});
@@ -269,10 +269,10 @@ void main() {
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
 	scene.add( skyBox );*/
 	
-	var skygeometry = new THREE.SphereGeometry(3000, 60, 40);
+	var skygeometry = new THREE.SphereGeometry(200, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
 var uniforms = {
-  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/Hv4PU7d.jpg') }
+  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/cGu4vxU.jpg') }
 };
 
 var skymaterial = new THREE.ShaderMaterial( {
@@ -498,7 +498,7 @@ scene.add(skyBox);
         controls.update(); //Update the controls
         renderer.render(scene, camera); //Render the scene and camera
 		if (r<=175) {
-		textMesh.position.set( 0-0.5*textWidth,0, -1000+r*r );
+		textMesh.position.set( 0-0.5*textWidth,0, -1000+Math.sqrt(r)*r );
 		r=r+1;}
 		if (r==176) {
 		DIS = true;
