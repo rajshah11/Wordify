@@ -141,7 +141,7 @@ void main() {
     }
 	
 			var material1 = new THREE.MeshPhongMaterial({color: 0xffffff});
-		var textgeom = new THREE.TextGeometry('wordify',{size:50, height:25,
+		var textgeom = new THREE.TextGeometry('wordify',{size:25, height:5,
 							curveSegments:4, font:"optimer", weight:"bold",
 							style:"normal"});
 		 var textMesh = new THREE.Mesh( textgeom, material1 );
@@ -269,7 +269,7 @@ void main() {
 	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
 	scene.add( skyBox );*/
 	
-	var skygeometry = new THREE.SphereGeometry(200, 6, 4);
+	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
 var uniforms = {
   texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/cGu4vxU.jpg') }
@@ -485,7 +485,7 @@ scene.add(skyBox);
         requestAnimationFrame(animate);
 
         render();
-		if (r==176 && DIS) {display();} 
+		if (r==126 && DIS) {display();} 
         stats.update(); //Update the stats
 
     }
@@ -497,10 +497,10 @@ scene.add(skyBox);
         plane.rotation.z = camera.rotation.z;*/
         controls.update(); //Update the controls
         renderer.render(scene, camera); //Render the scene and camera
-		if (r<=175) {
-		textMesh.position.set( 0-0.5*textWidth,0, -1000+Math.sqrt(r)*r );
+		if (r<=125) {
+		textMesh.position.set( 0-0.5*textWidth,0, -700+Math.sqrt(r)*r/1.5 );
 		r=r+1;}
-		if (r==176) {
+		if (r==126) {
 		DIS = true;
 		scene.remove(textMesh);
 		}
