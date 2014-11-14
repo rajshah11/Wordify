@@ -25,14 +25,16 @@ body {
         position: absolute;
         font-family: 'DINCond';
         font-size: 25px;
-        color: #cce8ed
+        color: #cce8ed;
+        display: none;
 	}
     #clock {
         opacity: 0.8;
         position: absolute;
         font-family: 'DINCond';
         font-size: 25px;
-        color: #cce8ed
+        color: #cce8ed;
+        display: none;
     }
     #clockTitle {
         position: absolute;
@@ -40,6 +42,7 @@ body {
         font-size: 29px;
         opacity: 0.8;
         color: #cce8ed;
+        display: none;
     }
     #scoreTitle {
         position: absolute;
@@ -47,13 +50,15 @@ body {
         font-size: 29px;
         opacity: 0.8;
         color: #cce8ed;
+        display: none;
     }
     #score {
         opacity: 0.8;
         position: absolute;
         font-family: 'DINCond';
         font-size: 25px;
-        color: #cce8ed
+        color: #cce8ed;
+        display: none;
     }
     #wordTitle {
         position: absolute;
@@ -61,8 +66,10 @@ body {
         font-size: 29px;
         opacity: 0.8;
         color: #cce8ed;
+        display: none;
     }
     #startbutton {
         opacity: 0.7;
         position: absolute;
+        display: none;
     }
