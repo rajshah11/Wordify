@@ -35,6 +35,18 @@ Raj Shah [11110077]
 	#wordlist {
 	overflow: auto;
 	}
+	#startbutton{
+	display: none
+	}	
+	#score{
+	display: none
+	}	
+	#wordlist{
+	display: none
+	}	
+	#clock{
+	display: none
+	}	
 	   </style>
 </head>
 
@@ -85,6 +97,26 @@ Raj Shah [11110077]
 		<script src="fonts/optimer_bold.typeface.js"></script>
 		<script src="fonts/optimer_regular.typeface.js"></script>
 		
+		<script type="application/x-glsl" id="sky-vertex">
+varying vec2 vUV;
+
+void main() {
+  vUV = uv;
+  vec4 pos = vec4(position, 1.0);
+  gl_Position = projectionMatrix * modelViewMatrix * pos;
+}
+</script>
+
+<script type="application/x-glsl" id="sky-fragment">
+uniform sampler2D texture;
+varying vec2 vUV;
+
+void main() {
+  vec4 sample = texture2D(texture, vUV);
+  gl_FragColor = vec4(sample.xyz, sample.w);
+}
+</script>
+
     <script>
 	 //Adding a looking mechanism
     THREE.Utils = {
@@ -99,7 +131,7 @@ Raj Shah [11110077]
     var INT = false,	//Boolean variable used for representing intersections
         intCube, intCube1;
     var word = [];
-    var camvec = new THREE.Vector3(),r=0;
+    var camvec = new THREE.Vector3(),r=0, DIS=false;
 	var dictionary = new BJSpell("en_US.js");
 	var secondscounter=120, minutecounter=2, totalpoints=0;
 	var startGame = 0;
@@ -155,6 +187,7 @@ Raj Shah [11110077]
   document.getElementById("wordlist").innerText = "WORDS"
     document.body.appendChild(wordlistElement);
   var sbuttonElement = document.getElementById("startbutton");
+  document.body.appendChild(sbuttonElement);
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -162,7 +195,7 @@ Raj Shah [11110077]
 
         controls = new THREE.TrackballControls(camera); //Initializing TrackballControls (it uses TrackballControls.js) 
         controls.rotateSpeed = 7;
-        controls.zoomSpeed = 4;
+        controls.zoomSpeed = 2;
         controls.panSpeed = 1;
         controls.staticMoving = true;
 		controls.enabled=false;
@@ -190,7 +223,7 @@ Raj Shah [11110077]
             });
 			
 			var startcube = new MyGameCube(geom, smaterial);
-			scene.add(startcube);
+
         var i;
         for (i = 0; i < 100; i++) { //Generate 100 random cubes
             var letter = randLetter(); //Get a letter using randLetter function
@@ -219,6 +252,40 @@ Raj Shah [11110077]
 
 		scene.add(textMesh);
         scene.add(light); //Add light to the scene
+		
+			/*var imagePrefix = "images/dawnmountain-";
+	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+	var imageSuffix = ".png";
+	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );	
+	
+	var materialArray = [];
+	THREE.ImageUtils.crossOrigin = '';
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture("http://i.imgur.com/KIYRScN.jpg" ),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+	scene.add( skyBox );*/
+	
+	var skygeometry = new THREE.SphereGeometry(3000, 60, 40);
+	THREE.ImageUtils.crossOrigin = '';
+var uniforms = {
+  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/Hv4PU7d.jpg') }
+};
+
+var skymaterial = new THREE.ShaderMaterial( {
+  uniforms:       uniforms,
+  vertexShader:   document.getElementById('sky-vertex').textContent,
+  fragmentShader: document.getElementById('sky-fragment').textContent
+});
+
+skyBox = new THREE.Mesh(skygeometry, skymaterial);
+skyBox.scale.set(-1, 1, 1);
+skyBox.eulerOrder = 'XZY';
+skyBox.renderDepth = 1000.0;
+scene.add(skyBox);
 
         projector = new THREE.Projector(); //Create a new projector
 
@@ -405,11 +472,20 @@ Raj Shah [11110077]
 	window.clearInterval(mytimer);
 	}
 	}
+	
+	function display(){
+	document.getElementById("clock").style.display = 'block';
+	document.getElementById("wordlist").style.display = 'block';
+	document.getElementById("score").style.display = 'block';
+	document.getElementById("startbutton").style.display = 'block';
+	}
+	
     function animate() { //Animate function
 
         requestAnimationFrame(animate);
 
         render();
+		if (r==176 && DIS) {display();} 
         stats.update(); //Update the stats
 
     }
@@ -421,10 +497,13 @@ Raj Shah [11110077]
         plane.rotation.z = camera.rotation.z;*/
         controls.update(); //Update the controls
         renderer.render(scene, camera); //Render the scene and camera
-		if (r<=125) {
-		textMesh.position.set( 0-0.5*textWidth,0, -1000+10*r );
+		if (r<=175) {
+		textMesh.position.set( 0-0.5*textWidth,0, -1000+r*r );
 		r=r+1;}
-		else scene.remove(textMesh);
+		if (r==176) {
+		DIS = true;
+		scene.remove(textMesh);
+		}
         if (INT) { //Rotate the cube on intersection
             intCube.rotation.x += 0.05;
             intCube.rotation.y += 0.02;
