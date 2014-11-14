@@ -1,0 +1,68 @@
+@font-face {
+    font-family: 'DINCond';
+    src: url('fonts/DINCond-Light.otf');
+}
+
+@font-face {
+    font-family: 'Lato-Bold';
+    src: url('fonts/Lato-Bold.eot');
+}
+
+body {
+        font-family: Monospace;
+        background-color: #f0f0f0;
+        margin: 0px;
+        overflow: hidden;
+    }
+    #main {
+        background-color: #f0f0f0;
+        overflow: hidden;
+        position: static;
+    }
+	#wordlist {
+        overflow: auto;
+        opacity: 0.7;
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 25px;
+        color: #cce8ed
+	}
+    #clock {
+        opacity: 0.8;
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 25px;
+        color: #cce8ed
+    }
+    #clockTitle {
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 29px;
+        opacity: 0.8;
+        color: #cce8ed;
+    }
+    #scoreTitle {
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 29px;
+        opacity: 0.8;
+        color: #cce8ed;
+    }
+    #score {
+        opacity: 0.8;
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 25px;
+        color: #cce8ed
+    }
+    #wordTitle {
+        position: absolute;
+        font-family: 'DINCond';
+        font-size: 29px;
+        opacity: 0.8;
+        color: #cce8ed;
+    }
+    #startbutton {
+        opacity: 0.7;
+        position: absolute;
+    }

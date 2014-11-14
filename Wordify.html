@@ -11,31 +11,19 @@ Raj Shah [11110077]
 <head>
     <title>Wordify</title>
     <!--Title of the HTML page-->
+    <link rel="stylesheet" href="style.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <div id="main"></div>
-	<div id="clock">
-	</div>
+	<div id="clockTitle"></div>
+    <div id="clock"></div>
+    <div id="scoreTitle"></div>
 	<div id="score"></div>
+    <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button type="button" id="startbutton">START</button>
     <!--Creating an HTML division-->
-    <style>
-    body {
-        font-family: Monospace;
-        background-color: #f0f0f0;
-        margin: 0px;
-        overflow: hidden;
-    }
-    #main {
-        background-color: #f0f0f0;
-        overflow: hidden;
-        position: static;
-    }
-	#wordlist {
-	overflow: auto;
-	}
-	   </style>
+
 </head>
 
 <body>
@@ -44,34 +32,51 @@ Raj Shah [11110077]
     document.getElementById("main").style.width = window.innerWidth + "px"; //Set the width of the main division
     document.getElementById("main").style.top = "0px"; //Position of the main divison
     document.getElementById("main").style.left = "0px";
-	document.getElementById("clock").style.height = "100px"; //Set the height of the main division
+
+    document.getElementById("clockTitle").style.height = "34px"; //Set the height of the main division
+    document.getElementById("clockTitle").style.width = "150px"; //Set the width of the main division
+    document.getElementById("clockTitle").style.top = "10px"; //Position of the main divison
+    document.getElementById("clockTitle").style.left = window.innerWidth-150-10 + "px";
+    document.getElementById("clockTitle").style.backgroundColor = '#2190c1';
+    document.getElementById("clockTitle").innerText = "TIME";
+
+	document.getElementById("clock").style.height = "27px"; //Set the height of the main division
     document.getElementById("clock").style.width = "150px"; //Set the width of the main division
-    document.getElementById("clock").style.top = "10px"; //Position of the main divison
+    document.getElementById("clock").style.top = "45px"; //Position of the main divison
     document.getElementById("clock").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("clock").style.backgroundColor = 'white'
-	document.getElementById("clock").style.opacity = "0.7"
-	document.getElementById("clock").style.position = 'absolute'
-	document.getElementById("score").style.height = "100px"; //Set the height of the main division
+	document.getElementById("clock").style.backgroundColor = '#1b6d96';
+	
+    document.getElementById("scoreTitle").style.height = "34px"; //Set the height of the main division
+    document.getElementById("scoreTitle").style.width = "150px"; //Set the width of the main division
+    document.getElementById("scoreTitle").style.top = "90px"; //Position of the main divison
+    document.getElementById("scoreTitle").style.left = window.innerWidth-150-10 + "px";
+    document.getElementById("scoreTitle").style.backgroundColor = '#2190c1';
+    document.getElementById("scoreTitle").innerText = "SCORE";
+
+    document.getElementById("score").style.height = "27px"; //Set the height of the main division
     document.getElementById("score").style.width = "150px"; //Set the width of the main division
-    document.getElementById("score").style.top = "120px"; //Position of the main divison
+    document.getElementById("score").style.top = "125px"; //Position of the main divison
     document.getElementById("score").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("score").style.backgroundColor = 'white'
-	document.getElementById("score").style.opacity = "0.7"
-	document.getElementById("score").style.position = 'absolute'
+	document.getElementById("score").style.backgroundColor = '#1b6d96';
+    
+    document.getElementById("wordTitle").style.height = "34px"; //Set the height of the main division
+    document.getElementById("wordTitle").style.width = "150px"; //Set the width of the main division
+    document.getElementById("wordTitle").style.top = "170px"; //Position of the main divison
+    document.getElementById("wordTitle").style.left = window.innerWidth-150-10 + "px";
+    document.getElementById("wordTitle").style.backgroundColor = '#2190c1';
+    document.getElementById("wordTitle").innerText = "WORDS";
+
 	document.getElementById("wordlist").style.height = "425px"; //Set the height of the main division
 	document.getElementById("wordlist").style.width = "150px"; //Set the width of the main division
-    document.getElementById("wordlist").style.top = "230px"; //Position of the main divison
+    document.getElementById("wordlist").style.top = "205px"; //Position of the main divison
     document.getElementById("wordlist").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("wordlist").style.backgroundColor = 'white'
-	document.getElementById("wordlist").style.opacity = "0.7"
-	document.getElementById("wordlist").style.position = 'absolute'
+	document.getElementById("wordlist").style.backgroundColor = '#1b6d96';
+	
 	document.getElementById("startbutton").style.height = "50px"; //Set the height of the main division
 	document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
     document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
 	document.getElementById("startbutton").style.backgroundColor = 'white'
-	document.getElementById("startbutton").style.opacity = "0.7"
-	document.getElementById("startbutton").style.position = 'absolute'
     </script>
 
     <!--Including all the javascript source files used-->
@@ -149,10 +154,9 @@ Raj Shah [11110077]
   addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
     var scoreElement = document.getElementById("score");
   document.body.appendChild(scoreElement);
- document.getElementById("score").innerText = "SCORE"+"\n"+"0";
+ document.getElementById("score").innerText = "0";
       var wordlistElement = document.getElementById("wordlist");
   document.body.appendChild(wordlistElement);
-  document.getElementById("wordlist").innerText = "WORDS"
     document.body.appendChild(wordlistElement);
   var sbuttonElement = document.getElementById("startbutton");
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
@@ -374,15 +378,15 @@ Raj Shah [11110077]
 	
 	function addclocktext(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText = "TIME"+"\n"+text;
+		myelement.innerText = text;
 	}
 		function addscoretext(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText = "SCORE"+"\n"+text;
+		myelement.innerText = text;
 	}
 	function addword(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText =myelement.innerText +"\n"+ text;
+		myelement.innerText =text + "\n" + myelement.innerText;
 	}
 
     function onWindowResize() {
