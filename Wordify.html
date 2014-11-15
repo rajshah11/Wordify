@@ -205,8 +205,8 @@ void main() {
   document.body.appendChild(invwordElement);
    var resbuttonElement = document.getElementById("restartbutton");
   document.body.appendChild(resbuttonElement);
-  createjs.Sound.registerSound({id:"ahoh_Sound", src:"sounds/165854__dermotte__o-o.wav"});
-  createjs.Sound.registerSound({id:"knock_Sound", src:"sounds/164579__adam-n__pan-impact-6.wav"});
+  createjs.Sound.registerSound({id:"ahoh_Sound", src:"./sounds/165854__dermotte__o-o.wav"});
+  createjs.Sound.registerSound({id:"knock_Sound", src:"./sounds/164579__adam-n__pan-impact-6.wav"});
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
