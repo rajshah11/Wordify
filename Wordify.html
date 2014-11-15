@@ -439,6 +439,7 @@ function handleFileLoad(event) {
     }
 
     function onDocumentKeyDown(event) {
+	
 		if (event.keyCode == 13 && startGame==1) { //Keycode for Enter
             var currentWord = '';
             var totpot = 0;
@@ -480,7 +481,12 @@ function handleFileLoad(event) {
             }
 
         }
-        if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
+		else if (event.keyCode == 82 && startGame==1){
+			camera.position.z = 250;
+
+			camera.lookAt(new THREE.Vector3(0, 0, 0));		
+		}
+        else if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
             for (i = 0; i < word.length; i++) {
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
