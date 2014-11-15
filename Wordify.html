@@ -319,7 +319,16 @@ scene.add(skyBox);
   }
 
    }
-   
+
+function play(file) 
+{
+  var embed=document.createElement('object');
+  embed.setAttribute('type','audio/wav');
+  embed.setAttribute('data', './sounds/'+file);
+  embed.setAttribute('autostart', true);
+  document.getElementsByTagName('body')[0].appendChild(embed);
+}
+
    function init_after(){
   addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
  document.getElementById("score").innerText = "0";
@@ -454,6 +463,7 @@ scene.add(skyBox);
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
             }
+
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
@@ -474,6 +484,7 @@ scene.add(skyBox);
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
             }
+			if(word.length != 0) play("25841__freqman__concrete-block-1.wav");
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
@@ -568,7 +579,9 @@ scene.add(skyBox);
         }
 		if (INVALID) {
 		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
-		
+		if(inv == 0 ){
+			play("165854__dermotte__o-o.wav");
+		}
 		if(inv<15){
 		camera.position.x += 3*Math.cos(2*3.14*0.2*inv);
 		camera.position.y += 1.5*Math.cos(2*3.14*0.2*inv);
