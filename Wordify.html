@@ -77,6 +77,7 @@ Raj Shah [11110077]
     document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
 	document.getElementById("startbutton").style.backgroundColor = 'white'
+	
     </script>
 
     <!--Including all the javascript source files used-->
@@ -264,7 +265,7 @@ void main() {
 	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
 var uniforms = {
-  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/cGu4vxU.jpg') }
+  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
 };
 
 var skymaterial = new THREE.ShaderMaterial( {
@@ -357,8 +358,6 @@ scene.add(skyBox);
                 INT = false;
                 intCube.isSelected = 1; //Change the selected flag on selection
                 word.push(intCube); //Push the selected cubes to a dynamic array
-                console.log(intCube.letter);
-                console.log(intCube.points());
             }
         }
 
@@ -459,6 +458,9 @@ scene.add(skyBox);
 	addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
 	}
 	else {
+	while (allCubes.children.length != 0) {
+                allCubes.remove(allCubes.children[allCubes.children.length-1]); //Reset the dynamic array
+            }
 	scene.remove(allCubes);
 	var mytimer = window.setInterval(function(){timer()}, 1000);
 	window.clearInterval(mytimer);
@@ -473,7 +475,6 @@ scene.add(skyBox);
     document.getElementById("clockTitle").style.display = 'block';
     document.getElementById("scoreTitle").style.display = 'block';
     document.getElementById("wordTitle").style.display = 'block';
-
 	}
 	
     function animate() { //Animate function
@@ -481,7 +482,10 @@ scene.add(skyBox);
         requestAnimationFrame(animate);
 
         render();
-		if (r==126 && DIS) {display();} 
+		if (r==126) {
+		display();
+		r=r+1;
+		} 
         stats.update(); //Update the stats
 
     }
@@ -497,7 +501,6 @@ scene.add(skyBox);
 		textMesh.position.set( 0-0.5*textWidth,0, -700+Math.sqrt(r)*r/1.5 );
 		r=r+1;}
 		if (r==126) {
-		DIS = true;
 		scene.remove(textMesh);
 		}
         if (INT) { //Rotate the cube on intersection
