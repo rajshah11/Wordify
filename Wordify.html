@@ -22,6 +22,8 @@ Raj Shah [11110077]
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button type="button" id="startbutton">START</button>
+	<div id="invalidword"></div>
+		<button type="button" id="restartbutton">RESTART</button>
     <!--Creating an HTML division-->
 
 </head>
@@ -78,6 +80,19 @@ Raj Shah [11110077]
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
 	document.getElementById("startbutton").style.backgroundColor = 'white'
 	
+	document.getElementById("invalidword").style.height = window.innerHeight/4+"px"; //Set the height of the main division
+	document.getElementById("invalidword").style.width = window.innerWidth/2+"px"; //Set the width of the main division
+    document.getElementById("invalidword").style.top = window.innerHeight/4+"px"; //Position of the main divison
+    document.getElementById("invalidword").style.left = window.innerWidth/4+ "px";
+	document.getElementById("invalidword").style.backgroundColor = 'white'
+	document.getElementById("invalidword").innerText = "Invalid Word";
+	
+	document.getElementById("restartbutton").style.height = "50px"; //Set the height of the main division
+	document.getElementById("restartbutton").style.width = "200px"; //Set the width of the main division
+    document.getElementById("restartbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
+    document.getElementById("restartbutton").style.left = window.innerWidth/2-100 + "px";
+	document.getElementById("restartbutton").style.backgroundColor = 'white'
+	
     </script>
 
     <!--Including all the javascript source files used-->
@@ -90,6 +105,8 @@ Raj Shah [11110077]
 	<script src="jquery-1.9.1.js"></script>
 		<script src="fonts/optimer_bold.typeface.js"></script>
 		<script src="fonts/optimer_regular.typeface.js"></script>
+		<script src="fonts/gentilis_bold.typeface.js"></script>
+		<script src="fonts/gentilis_regular.typeface.js"></script>
 		
 		<script type="application/x-glsl" id="sky-vertex">
 varying vec2 vUV;
@@ -125,10 +142,10 @@ void main() {
     var INT = false,	//Boolean variable used for representing intersections
         intCube, intCube1;
     var word = [];
-    var camvec = new THREE.Vector3(),r=0, DIS=false;
+    var camvec = new THREE.Vector3(),r=0;
 	var dictionary = new BJSpell("en_US.js");
 	var secondscounter=120, minutecounter=2, totalpoints=0;
-	var startGame = 0;
+	var startGame = 0, INVALID = 0, inv;
     function randLetter() { //Function to return a random letter
         var letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
         return letters.substr(Math.floor(Math.random() * 98), 1);
@@ -136,7 +153,7 @@ void main() {
 	
 			var material1 = new THREE.MeshPhongMaterial({color: 0xffffff});
 		var textgeom = new THREE.TextGeometry('wordify',{size:25, height:5,
-							curveSegments:4, font:"optimer", weight:"bold",
+							curveSegments:4, font:"gentilis", weight:"bold",
 							style:"normal"});
 		 var textMesh = new THREE.Mesh( textgeom, material1 );
     textgeom.computeBoundingBox();
@@ -181,6 +198,10 @@ void main() {
     document.body.appendChild(wordlistElement);
   var sbuttonElement = document.getElementById("startbutton");
   document.body.appendChild(sbuttonElement);
+    var invwordElement = document.getElementById("invalidword");
+  document.body.appendChild(invwordElement);
+   var resbuttonElement = document.getElementById("restartbutton");
+  document.body.appendChild(resbuttonElement);
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -199,18 +220,7 @@ void main() {
 
         var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
         allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
-/*		        var hud1geom = new THREE.PlaneGeometry(window.innerWidth,window.innerHeight);
-        var hud1mat = new THREE.MeshPhongMaterial( {map: generateplaneTexture(0.40*window.innerWidth,0.50*window.innerHeight)} );
-        plane = new THREE.Mesh( hud1geom, hud1mat );
-//        var tempvar = new THREE.Vector3();
-        camera.rotation.eulerOrder = 'XZY';
-        plane.rotation.eulerOrder = 'XZY';
-
-        plane.position.copy(camera.position);
-		plane.position.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750));
-        plane.lookAt(camera)
-        scene.add( plane );
-*/		
+	
 		var smaterial = new THREE.MeshPhongMaterial({
                 map: generateStartTexture()
             });
@@ -245,22 +255,6 @@ void main() {
 
 		scene.add(textMesh);
         scene.add(light); //Add light to the scene
-		
-			/*var imagePrefix = "images/dawnmountain-";
-	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-	var imageSuffix = ".png";
-	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );	
-	
-	var materialArray = [];
-	THREE.ImageUtils.crossOrigin = '';
-	for (var i = 0; i < 6; i++)
-		materialArray.push( new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture("http://i.imgur.com/KIYRScN.jpg" ),
-			side: THREE.BackSide
-		}));
-	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
-	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
-	scene.add( skyBox );*/
 	
 	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
@@ -303,12 +297,83 @@ scene.add(skyBox);
   	        if(startGame==0){
 			controls.enabled = true;
 			startGame = !startGame;
-			sbuttonElement.remove();
+			sbuttonElement.style.display = 'none';
+			sbuttonElement.disabled=true;
         	scene.add(allCubes);
-			var mytimer = window.setInterval(function(){timer()}, 1000);
+			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
-    }
+		resbuttonElement.onclick = function(){
+  	        if(startGame==0){
+			controls.enabled = true;
+			startGame = !startGame;
+			resbuttonElement.style.display = 'none';
+			resbuttonElement.disabled=true;
+			INT = false; word = [];
+			secondscounter=120; minutecounter=2; totalpoints=0;
+			INVALID = 0;
+			init_after();
+			scene.add(allCubes);
+			mytimer = window.setInterval(function(){timer()}, 1000);
+        }
+  }
+
+   }
+   
+   function init_after(){
+  addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+ document.getElementById("score").innerText = "0";
+  document.getElementById("wordlist").innerText='';
+  
+      var resbuttonElement = document.getElementById("restartbutton");
+  document.body.appendChild(resbuttonElement);
+          var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
+        allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
+	
+		var smaterial = new THREE.MeshPhongMaterial({
+                map: generateStartTexture()
+            });
+			
+			var startcube = new MyGameCube(geom, smaterial);
+
+        var i;
+        for (i = 0; i < 100; i++) { //Generate 100 random cubes
+            var letter = randLetter(); //Get a letter using randLetter function
+
+            //Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
+            var material = new THREE.MeshPhongMaterial({
+                map: generateTexture(letter)
+            });
+
+            //Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
+            var cube = new MyGameCube(geom, material);
+
+            cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
+            cube.position.y = (-Math.random() + 0.5) * 150;
+            cube.position.z = (-Math.random() + 0.5) * 150;
+
+            cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
+            cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
+            cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
+
+            cube.letter = letter; //Assign the letter to this cube
+            allCubes.add(cube); //Add the cube to allCubes
+        }
+		resbuttonElement.onclick = function(){
+  	        if(startGame==0){
+			controls.enabled = true;
+			startGame = !startGame;
+			resbuttonElement.style.display = 'none';
+			resbuttonElement.disabled=true;
+			INT = false; word = [];
+			secondscounter=120; minutecounter=2; totalpoints=0;
+			INVALID = 0;
+			init_after();
+			scene.add(allCubes);
+			mytimer = window.setInterval(function(){timer()}, 1000);
+        }
+		}
+   }
 
     function onDocumentMouseMove(event) {
         event.preventDefault();
@@ -326,7 +391,7 @@ scene.add(skyBox);
             if (!cube.isSelected) cube.material.color.setHex(0xffffff);
         }); //Update the color of the cubes 
 
-        if (intersects.length > 0 && !intersects[0].object.isSelected) {
+        if (intersects.length > 0 && !intersects[0].object.isSelected && INVALID==0) {
 
             intersects[0].object.material.color.setHex(0xC7F464); //Change the color of the nearest intersecting cube
             mainElement.style.cursor = 'pointer'; //Change the mouse pointer
@@ -364,21 +429,7 @@ scene.add(skyBox);
     }
 
     function onDocumentKeyDown(event) {
-        if (event.keyCode == 80){
-        	startGame = !startGame;
-        	if(!startGame){
-        		scene.remove(allCubes);
-        	}
-        	else{
-	        	scene.add(allCubes);
-        	}
-        	
-        }
-        else if (event.keyCode == 86){
-
-            allCubes.visible = !allCubes.visible;
-        }
-        else if (event.keyCode == 13) { //Keycode for Enter
+		if (event.keyCode == 13 && startGame==1) { //Keycode for Enter
             var currentWord = '';
             var totpot = 0;
             for (i = 0; i < word.length; i++) {
@@ -409,14 +460,16 @@ scene.add(skyBox);
             allCubes.children.forEach(function(cube) {
                 if (!cube.isSelected) cube.material.color.setHex(0xffffff);
             }); //Update the color
-			alert("Invalid Word");
+			INVALID=1;
+			inv=0;
+			//alert("Invalid Word");
 			}
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
 
         }
-        if (event.keyCode == 8) { //Keycode for Backspace
+        if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
             for (i = 0; i < word.length; i++) {
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
@@ -462,8 +515,11 @@ scene.add(skyBox);
                 allCubes.remove(allCubes.children[allCubes.children.length-1]); //Reset the dynamic array
             }
 	scene.remove(allCubes);
-	var mytimer = window.setInterval(function(){timer()}, 1000);
 	window.clearInterval(mytimer);
+	startGame=0;
+	document.getElementById("restartbutton").style.display = 'block';
+		document.getElementById("restartbutton").disabled = false;
+
 	}
 	}
 	
@@ -472,10 +528,12 @@ scene.add(skyBox);
 	document.getElementById("wordlist").style.display = 'block';
 	document.getElementById("score").style.display = 'block';
 	document.getElementById("startbutton").style.display = 'block';
+	document.getElementById("startbutton").disabled = false;
     document.getElementById("clockTitle").style.display = 'block';
     document.getElementById("scoreTitle").style.display = 'block';
     document.getElementById("wordTitle").style.display = 'block';
 	}
+	
 	
     function animate() { //Animate function
 
@@ -508,6 +566,23 @@ scene.add(skyBox);
             intCube.rotation.y += 0.02;
             intCube.rotation.z += 0.03;
         }
+		if (INVALID) {
+		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
+		
+		if(inv<15){
+		camera.position.x += 3*Math.cos(2*3.14*0.2*inv);
+		camera.position.y += 1.5*Math.cos(2*3.14*0.2*inv);
+        camera.position.z -= 3*Math.cos(2*3.14*0.2*inv);
+		}
+		else if(inv<50){
+		    document.getElementById("invalidword").style.display = 'block';
+		}
+		if(inv==50){
+		INVALID=0;
+		document.getElementById("invalidword").style.display = 'none';
+		}
+		inv=inv+1;
+		}
     }
     </script>
 

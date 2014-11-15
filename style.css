@@ -73,3 +73,13 @@ body {
         position: absolute;
         display: none;
     }
+    #invalidword{
+	position:absolute;
+	display:none;
+    }
+    #restartbutton {
+        opacity: 0.7;
+        position: absolute;
+        display: none;
+	disabled: true;
+    }
