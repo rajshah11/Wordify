@@ -23,7 +23,7 @@ Raj Shah [11110077]
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
-      
+    
 	
 	<div id="invalidword"></div>
 		<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
@@ -103,6 +103,7 @@ Raj Shah [11110077]
     <script src="./cubeTexture.js"></script>
     <script src="js/controls/TrackballControls.js"></script>
     <script src="js/libs/stats.min.js"></script>
+    <script src="js/libs/soundjs-0.5.2.min.js"></script>
 	<script src="BJSpell.js"></script>
 	<script src="jquery-1.9.1.js"></script>
 		<script src="fonts/optimer_bold.typeface.js"></script>
@@ -204,6 +205,8 @@ void main() {
   document.body.appendChild(invwordElement);
    var resbuttonElement = document.getElementById("restartbutton");
   document.body.appendChild(resbuttonElement);
+  createjs.Sound.registerSound({id:"ahoh_Sound", src:"sounds/165854__dermotte__o-o.wav"});
+  createjs.Sound.registerSound({id:"knock_Sound", src:"sounds/164579__adam-n__pan-impact-6.wav"});
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -322,14 +325,6 @@ scene.add(skyBox);
 
    }
 
-function play(file) 
-{
-  var embed=document.createElement('object');
-  embed.setAttribute('type','audio/wav');
-  embed.setAttribute('data', './sounds/'+file);
-  embed.setAttribute('autostart', true);
-  document.getElementsByTagName('body')[0].appendChild(embed);
-}
 
    function init_after(){
   addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
@@ -486,7 +481,7 @@ function play(file)
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
             }
-			if(word.length != 0) play("25841__freqman__concrete-block-1.wav");
+			if(word.length != 0) createjs.Sound.play("knock_Sound");
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
@@ -582,7 +577,7 @@ function play(file)
 		if (INVALID) {
 		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
 		if(inv == 0 ){
-			play("165854__dermotte__o-o.wav");
+			createjs.Sound.play("ahoh_Sound");
 		}
 		if(inv<15){
 		camera.position.x += 3*Math.cos(2*3.14*0.2*inv);
