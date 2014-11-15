@@ -14,6 +14,7 @@ Raj Shah [11110077]
     <link rel="stylesheet" href="style.css">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+
     <div id="main"></div>
 	<div id="clockTitle"></div>
     <div id="clock"></div>
@@ -21,9 +22,11 @@ Raj Shah [11110077]
 	<div id="score"></div>
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
-	<button type="button" id="startbutton">START</button>
+	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
+      
+	
 	<div id="invalidword"></div>
-		<button type="button" id="restartbutton">RESTART</button>
+		<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
     <!--Creating an HTML division-->
 
 </head>
@@ -78,7 +81,6 @@ Raj Shah [11110077]
 	document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
     document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
-	document.getElementById("startbutton").style.backgroundColor = 'white'
 	
 	document.getElementById("invalidword").style.height = window.innerHeight/4+"px"; //Set the height of the main division
 	document.getElementById("invalidword").style.width = window.innerWidth/2+"px"; //Set the width of the main division
