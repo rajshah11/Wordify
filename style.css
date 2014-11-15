@@ -73,7 +73,8 @@ body {
         position: absolute;
         display: none;
     }
-    .startBtn {
+
+    .btn {
         color: #fff;
         background-color: #e74c3c;
         font-weight: bold;
@@ -84,7 +85,18 @@ body {
         border-radius: 6px;
     }
      
-    .startBtn:hover {
+    .btn:hover {
         color: #e74c3c;
         background-color: #fff;
+    }
+
+    #invalidword{
+	position:absolute;
+	display:none;
+    }
+    #restartbutton {
+        opacity: 1;
+        position: absolute;
+        display: none;
+	    disabled: true;
     }
