@@ -207,6 +207,7 @@ void main() {
   document.body.appendChild(resbuttonElement);
   createjs.Sound.registerSound({id:"ahoh_Sound", src:"./sounds/165854__dermotte__o-o.wav"});
   createjs.Sound.registerSound({id:"knock_Sound", src:"./sounds/164579__adam-n__pan-impact-6.wav"});
+createjs.Sound.addEventListener("fileload", handleFileLoad);
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -263,21 +264,21 @@ void main() {
 	
 	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
-var uniforms = {
-  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
-};
+	var uniforms = {
+	  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
+	};
 
-var skymaterial = new THREE.ShaderMaterial( {
-  uniforms:       uniforms,
-  vertexShader:   document.getElementById('sky-vertex').textContent,
-  fragmentShader: document.getElementById('sky-fragment').textContent
-});
+	var skymaterial = new THREE.ShaderMaterial( {
+	  uniforms:       uniforms,
+	  vertexShader:   document.getElementById('sky-vertex').textContent,
+	  fragmentShader: document.getElementById('sky-fragment').textContent
+	});
 
-skyBox = new THREE.Mesh(skygeometry, skymaterial);
-skyBox.scale.set(-1, 1, 1);
-skyBox.eulerOrder = 'XZY';
-skyBox.renderDepth = 1000.0;
-scene.add(skyBox);
+	skyBox = new THREE.Mesh(skygeometry, skymaterial);
+	skyBox.scale.set(-1, 1, 1);
+	skyBox.eulerOrder = 'XZY';
+	skyBox.renderDepth = 1000.0;
+	scene.add(skyBox);
 
         projector = new THREE.Projector(); //Create a new projector
 
@@ -322,7 +323,10 @@ scene.add(skyBox);
 			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
-
+function handleFileLoad(event) {
+    // A sound has been preloaded.
+    console.log("Preloaded:", event.id, event.src);
+}
    }
 
 
