@@ -25,7 +25,7 @@ Raj Shah [11110077]
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
       
 	
-	<div id="invalidword"></div>
+	<div id="invalidword" class="notif"></div>
 		<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
     <!--Creating an HTML division-->
 
@@ -43,7 +43,7 @@ Raj Shah [11110077]
     document.getElementById("clockTitle").style.top = "10px"; //Position of the main divison
     document.getElementById("clockTitle").style.left = window.innerWidth-150-10 + "px";
     document.getElementById("clockTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("clockTitle").innerText = "TIME";
+    document.getElementById("clockTitle").innerHTML = "&nbsp;TIME";
 
 	document.getElementById("clock").style.height = "27px"; //Set the height of the main division
     document.getElementById("clock").style.width = "150px"; //Set the width of the main division
@@ -56,7 +56,7 @@ Raj Shah [11110077]
     document.getElementById("scoreTitle").style.top = "90px"; //Position of the main divison
     document.getElementById("scoreTitle").style.left = window.innerWidth-150-10 + "px";
     document.getElementById("scoreTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("scoreTitle").innerText = "SCORE";
+    document.getElementById("scoreTitle").innerHTML = "&nbsp;SCORE";
 
     document.getElementById("score").style.height = "27px"; //Set the height of the main division
     document.getElementById("score").style.width = "150px"; //Set the width of the main division
@@ -69,9 +69,9 @@ Raj Shah [11110077]
     document.getElementById("wordTitle").style.top = "170px"; //Position of the main divison
     document.getElementById("wordTitle").style.left = window.innerWidth-150-10 + "px";
     document.getElementById("wordTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("wordTitle").innerText = "WORDS";
+    document.getElementById("wordTitle").innerHTML = "&nbsp;WORDS";
 
-	document.getElementById("wordlist").style.height = "425px"; //Set the height of the main division
+	document.getElementById("wordlist").style.height = "350px"; //Set the height of the main division
 	document.getElementById("wordlist").style.width = "150px"; //Set the width of the main division
     document.getElementById("wordlist").style.top = "205px"; //Position of the main divison
     document.getElementById("wordlist").style.left = window.innerWidth-150-10 + "px";
@@ -82,18 +82,16 @@ Raj Shah [11110077]
     document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
 	
-	document.getElementById("invalidword").style.height = window.innerHeight/4+"px"; //Set the height of the main division
-	document.getElementById("invalidword").style.width = window.innerWidth/2+"px"; //Set the width of the main division
-    document.getElementById("invalidword").style.top = window.innerHeight/4+"px"; //Position of the main divison
-    document.getElementById("invalidword").style.left = window.innerWidth/4+ "px";
-	document.getElementById("invalidword").style.backgroundColor = 'white'
-	document.getElementById("invalidword").innerText = "Invalid Word";
+	document.getElementById("invalidword").style.height = window.innerHeight/6.4+"px"; //Set the height of the main division
+	document.getElementById("invalidword").style.width = window.innerWidth/4+"px"; //Set the width of the main division
+    document.getElementById("invalidword").style.top = window.innerHeight/2.8+"px"; //Position of the main divison
+    document.getElementById("invalidword").style.left = window.innerWidth/2.6+ "px";
+	document.getElementById("invalidword").innerHTML = "<br>INVALID WORD";
 	
 	document.getElementById("restartbutton").style.height = "50px"; //Set the height of the main division
 	document.getElementById("restartbutton").style.width = "200px"; //Set the width of the main division
     document.getElementById("restartbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("restartbutton").style.left = window.innerWidth/2-100 + "px";
-	document.getElementById("restartbutton").style.backgroundColor = 'white'
 	
     </script>
 
@@ -194,7 +192,7 @@ void main() {
   addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
     var scoreElement = document.getElementById("score");
   document.body.appendChild(scoreElement);
- document.getElementById("score").innerText = "0";
+ document.getElementById("score").innerHTML = "&nbsp;0";
       var wordlistElement = document.getElementById("wordlist");
   document.body.appendChild(wordlistElement);
     document.body.appendChild(wordlistElement);
@@ -487,15 +485,15 @@ scene.add(skyBox);
 	
 	function addclocktext(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText = text;
+		myelement.innerHTML = "&nbsp;"+text;
 	}
 		function addscoretext(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText = text;
+		myelement.innerHTML = "&nbsp;"+text;
 	}
 	function addword(element, text){
 	    var myelement = document.getElementById(element);
-		myelement.innerText =text + "\n" + myelement.innerText;
+		myelement.innerHTML ="&nbsp;"+text + "\n" + myelement.innerHTML;
 	}
 
     function onWindowResize() {

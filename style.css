@@ -78,7 +78,7 @@ body {
         color: #fff;
         background-color: #e74c3c;
         font-weight: bold;
-        border: 1px solid #900;
+        border: 2px solid #fff;
         font-family: 'DINCond';
         font-size: 29px;
         font-weight: bold;
@@ -88,15 +88,28 @@ body {
     .btn:hover {
         color: #e74c3c;
         background-color: #fff;
+        border: 2px solid #e74c3c;
+        cursor: pointer;
     }
 
     #invalidword{
-	position:absolute;
-	display:none;
+    	position:absolute;
+    	display:none;
     }
     #restartbutton {
         opacity: 1;
         position: absolute;
         display: none;
-	    disabled: true;
+	    
+    }
+
+    .notif {
+        color: #e74c3c;
+        background-color: #fff;
+        border: 2px solid #e74c3c;
+        font-family: 'DINCond';
+        font-size: 29px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
     }
