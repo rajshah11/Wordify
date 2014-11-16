@@ -23,6 +23,7 @@ Raj Shah [11110077]
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
+    <div id="help"></div>
     
 	
 	<div id="invalidword" class="notif"></div>
@@ -81,8 +82,14 @@ Raj Shah [11110077]
 	document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
     document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
+
+    document.getElementById("help").style.height = "250px"; //Set the height of the main division
+    document.getElementById("help").style.width = "200px"; //Set the width of the main division
+    document.getElementById("help").style.top = window.innerHeight/2-25+50+20+"px"; //Position of the main divison
+    document.getElementById("help").style.left = window.innerWidth/2-100 + "px";    
+	document.getElementById("help").innerHTML = "<b>KEYMAP</b><br>Z&nbsp;:&nbsp;Submit Word<br>X&nbsp;:&nbsp;Undo Selection<br>R&nbsp;:&nbsp;Reset View<br><br><b>HINTS</b><br>X, Z and Q get you more points than A, E and U.<br>Longer the words, higher the score.";
 	
-	document.getElementById("invalidword").style.height = window.innerHeight/6.4+"px"; //Set the height of the main division
+    document.getElementById("invalidword").style.height = window.innerHeight/6.4+"px"; //Set the height of the main division
 	document.getElementById("invalidword").style.width = window.innerWidth/4+"px"; //Set the width of the main division
     document.getElementById("invalidword").style.top = window.innerHeight/2.8+"px"; //Position of the main divison
     document.getElementById("invalidword").style.left = window.innerWidth/2.6+ "px";
@@ -199,6 +206,8 @@ void main() {
     document.body.appendChild(wordlistElement);
   var sbuttonElement = document.getElementById("startbutton");
   document.body.appendChild(sbuttonElement);
+  var helpElement = document.getElementById("help");
+  document.body.appendChild(helpElement);
     var invwordElement = document.getElementById("invalidword");
   document.body.appendChild(invwordElement);
    var resbuttonElement = document.getElementById("restartbutton");
@@ -303,7 +312,8 @@ createjs.Sound.addEventListener("fileload", handleFileLoad);
 			startGame = !startGame;
 			sbuttonElement.style.display = 'none';
 			sbuttonElement.disabled=true;
-        	scene.add(allCubes);
+            helpElement.style.display = 'none';
+            scene.add(allCubes);
 			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
@@ -545,6 +555,7 @@ function handleFileLoad(event) {
 	document.getElementById("score").style.display = 'block';
 	document.getElementById("startbutton").style.display = 'block';
 	document.getElementById("startbutton").disabled = false;
+    document.getElementById("help").style.display = 'block';
     document.getElementById("clockTitle").style.display = 'block';
     document.getElementById("scoreTitle").style.display = 'block';
     document.getElementById("wordTitle").style.display = 'block';

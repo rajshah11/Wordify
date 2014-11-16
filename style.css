@@ -113,3 +113,16 @@ body {
         text-align: center;
         font-weight: bold;
     }
+
+    #help{
+        opacity: 0.8;
+        position: absolute;
+        display: none;
+        color: #fff;
+        background-color: #fa6151;
+        font-family: 'DINCond';
+        font-size: 22px;
+        border-radius: 6px;
+        text-align: center;
+        border: 2px solid #fff;
+        }
