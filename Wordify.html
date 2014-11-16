@@ -278,11 +278,11 @@ createjs.Sound.addEventListener("fileload", handleFileLoad);
 	  fragmentShader: document.getElementById('sky-fragment').textContent
 	});
 
-	skyBox = new THREE.Mesh(skygeometry, skymaterial);
-	skyBox.scale.set(-1, 1, 1);
-	skyBox.eulerOrder = 'XZY';
-	skyBox.renderDepth = 1000.0;
-	scene.add(skyBox);
+	sky = new THREE.Mesh(skygeometry, skymaterial);
+	sky.scale.set(-1, 1, 1);
+	sky.eulerOrder = 'XZY';
+	sky.renderDepth = 1000.0;
+	scene.add(sky);
 
         projector = new THREE.Projector(); //Create a new projector
 
