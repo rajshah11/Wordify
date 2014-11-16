@@ -23,7 +23,7 @@ Raj Shah [11110077]
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
-      
+    
 	
 	<div id="invalidword" class="notif"></div>
 		<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
@@ -101,6 +101,7 @@ Raj Shah [11110077]
     <script src="./cubeTexture.js"></script>
     <script src="js/controls/TrackballControls.js"></script>
     <script src="js/libs/stats.min.js"></script>
+    <script src="js/libs/soundjs-0.5.2.min.js"></script>
 	<script src="BJSpell.js"></script>
 	<script src="jquery-1.9.1.js"></script>
 		<script src="fonts/optimer_bold.typeface.js"></script>
@@ -202,6 +203,9 @@ void main() {
   document.body.appendChild(invwordElement);
    var resbuttonElement = document.getElementById("restartbutton");
   document.body.appendChild(resbuttonElement);
+  createjs.Sound.registerSound({id:"ahoh_Sound", src:"./sounds/165854__dermotte__o-o.wav"});
+  createjs.Sound.registerSound({id:"knock_Sound", src:"./sounds/164579__adam-n__pan-impact-6.wav"});
+createjs.Sound.addEventListener("fileload", handleFileLoad);
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -258,21 +262,21 @@ void main() {
 	
 	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
 	THREE.ImageUtils.crossOrigin = '';
-var uniforms = {
-  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
-};
+	var uniforms = {
+	  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
+	};
 
-var skymaterial = new THREE.ShaderMaterial( {
-  uniforms:       uniforms,
-  vertexShader:   document.getElementById('sky-vertex').textContent,
-  fragmentShader: document.getElementById('sky-fragment').textContent
-});
+	var skymaterial = new THREE.ShaderMaterial( {
+	  uniforms:       uniforms,
+	  vertexShader:   document.getElementById('sky-vertex').textContent,
+	  fragmentShader: document.getElementById('sky-fragment').textContent
+	});
 
-skyBox = new THREE.Mesh(skygeometry, skymaterial);
-skyBox.scale.set(-1, 1, 1);
-skyBox.eulerOrder = 'XZY';
-skyBox.renderDepth = 1000.0;
-scene.add(skyBox);
+	skyBox = new THREE.Mesh(skygeometry, skymaterial);
+	skyBox.scale.set(-1, 1, 1);
+	skyBox.eulerOrder = 'XZY';
+	skyBox.renderDepth = 1000.0;
+	scene.add(skyBox);
 
         projector = new THREE.Projector(); //Create a new projector
 
@@ -317,9 +321,13 @@ scene.add(skyBox);
 			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
-
+function handleFileLoad(event) {
+    // A sound has been preloaded.
+    console.log("Preloaded:", event.id, event.src);
+}
    }
-   
+
+
    function init_after(){
   addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
  document.getElementById("score").innerText = "0";
@@ -429,6 +437,7 @@ scene.add(skyBox);
     }
 
     function onDocumentKeyDown(event) {
+	
 		if (event.keyCode == 13 && startGame==1) { //Keycode for Enter
             var currentWord = '';
             var totpot = 0;
@@ -454,6 +463,7 @@ scene.add(skyBox);
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
             }
+
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
@@ -469,11 +479,17 @@ scene.add(skyBox);
             }
 
         }
-        if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
+		else if (event.keyCode == 82 && startGame==1){
+			camera.position.z = 250;
+
+			camera.lookAt(new THREE.Vector3(0, 0, 0));		
+		}
+        else if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
             for (i = 0; i < word.length; i++) {
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
             }
+			if(word.length != 0) createjs.Sound.play("knock_Sound");
             while (word.length != 0) {
                 word.pop(); //Reset the dynamic array
             }
@@ -568,7 +584,9 @@ scene.add(skyBox);
         }
 		if (INVALID) {
 		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
-		
+		if(inv == 0 ){
+			createjs.Sound.play("ahoh_Sound");
+		}
 		if(inv<15){
 		camera.position.x += 3*Math.cos(2*3.14*0.2*inv);
 		camera.position.y += 1.5*Math.cos(2*3.14*0.2*inv);
