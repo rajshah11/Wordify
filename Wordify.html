@@ -23,10 +23,11 @@ Raj Shah [11110077]
     <div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
-      
-	
 	<div id="invalidword"></div>
-		<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
+	<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
+	<div id="scoreTitle1"></div>
+	<div id="score1"></div>
+	<button class="btn" type="button" id="pausebutton" autofocus="true">PAUSE</button>
     <!--Creating an HTML division-->
 
 </head>
@@ -93,8 +94,25 @@ Raj Shah [11110077]
 	document.getElementById("restartbutton").style.width = "200px"; //Set the width of the main division
     document.getElementById("restartbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
     document.getElementById("restartbutton").style.left = window.innerWidth/2-100 + "px";
-	document.getElementById("restartbutton").style.backgroundColor = 'white'
 	
+	document.getElementById("scoreTitle1").style.height = "34px"; //Set the height of the main division
+    document.getElementById("scoreTitle1").style.width = "200px"; //Set the width of the main division
+    document.getElementById("scoreTitle1").style.top = window.innerHeight/2+35+"px"; //Position of the main divison
+    document.getElementById("scoreTitle1").style.left = window.innerWidth/2-100 + "px";
+    document.getElementById("scoreTitle1").style.backgroundColor = '#2190c1';
+    document.getElementById("scoreTitle1").innerText = "SCORE";
+
+    document.getElementById("score1").style.height = "27px"; //Set the height of the main division
+    document.getElementById("score1").style.width = "200px"; //Set the width of the main division
+    document.getElementById("score1").style.top = window.innerHeight/2+70+"px"; //Position of the main divison
+    document.getElementById("score1").style.left = window.innerWidth/2-100 + "px";
+	document.getElementById("score1").style.backgroundColor = '#1b6d96';
+	
+	document.getElementById("pausebutton").style.height = "50px"; //Set the height of the main division
+	document.getElementById("pausebutton").style.width = "200px"; //Set the width of the main division
+    document.getElementById("pausebutton").style.top = 10+"px"; //Position of the main divison
+    document.getElementById("pausebutton").style.left = window.innerWidth/2-100 + "px";
+	document.getElementById("pausebutton").innerText = "PAUSE";
     </script>
 
     <!--Including all the javascript source files used-->
@@ -142,12 +160,12 @@ void main() {
     var mainElement;
     var camera, scene, projector, controls, renderer, plane, allCubes, mouse = new THREE.Vector2();
     var INT = false,	//Boolean variable used for representing intersections
-        intCube, intCube1;
+        intCube, intCube1, PAUSE = false;
     var word = [];
     var camvec = new THREE.Vector3(),r=0;
 	var dictionary = new BJSpell("en_US.js");
 	var secondscounter=120, minutecounter=2, totalpoints=0;
-	var startGame = 0, INVALID = 0, inv;
+	var startGame = 0, INVALID = 0, inv, vib=0;
     function randLetter() { //Function to return a random letter
         var letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
         return letters.substr(Math.floor(Math.random() * 98), 1);
@@ -165,26 +183,6 @@ void main() {
 	
     init(); //Calling the init and animate functions
     animate();
-	//pausescreen();
-
-    /*function pausescreen(){
-        	if(!startGame){
-        	camvec.copy(camera.position);
-        	camvec.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(750)	);
-        	camvec.sub(plane.position);
-        	camvec.multiplyScalar(0.3);
-			plane.position.add(camvec);
-    	    plane.lookAt(camera)
-    	}
-    	else {
-			camvec.copy(camera.position);
-        	camvec.add(THREE.Utils.cameraLookDir(camera).multiplyScalar(5000)	);
-        	camvec.sub(plane.position);
-        	camvec.multiplyScalar(0.003);
-			plane.position.add(camvec);
-    	    plane.lookAt(camera);
-    	}
-    }*/
 	
     function init() {
         mainElement = document.getElementById("main"); //Get element "main"
@@ -204,6 +202,8 @@ void main() {
   document.body.appendChild(invwordElement);
    var resbuttonElement = document.getElementById("restartbutton");
   document.body.appendChild(resbuttonElement);
+     var paubuttonElement = document.getElementById("pausebutton");
+  document.body.appendChild(paubuttonElement);
         camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
         camera.position.z = 250;
         camera.lookAt(new THREE.Vector3(0, 0, 0));
@@ -301,7 +301,10 @@ scene.add(skyBox);
 			startGame = !startGame;
 			sbuttonElement.style.display = 'none';
 			sbuttonElement.disabled=true;
+			paubuttonElement.style.display = 'block';
+			paubuttonElement.disabled=false;
         	scene.add(allCubes);
+			scene.remove(textMesh);
 			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
@@ -310,7 +313,11 @@ scene.add(skyBox);
 			controls.enabled = true;
 			startGame = !startGame;
 			resbuttonElement.style.display = 'none';
-			resbuttonElement.disabled=true;
+			resbuttonElement.disabled=true;			
+			paubuttonElement.style.display = 'block';
+			paubuttonElement.disabled=false;
+			document.getElementById("scoreTitle1").style.display = 'none';
+			document.getElementById("score1").style.display = 'none';
 			INT = false; word = [];
 			secondscounter=120; minutecounter=2; totalpoints=0;
 			INVALID = 0;
@@ -319,7 +326,19 @@ scene.add(skyBox);
 			mytimer = window.setInterval(function(){timer()}, 1000);
         }
   }
-
+		paubuttonElement.onclick = function(){
+  	        PAUSE=!PAUSE;
+			if (PAUSE){
+			controls.enabled = false;
+			paubuttonElement.innerText= 'RESUME';
+			allCubes.visible=false;
+        }
+			if(!PAUSE){
+			controls.enabled = true;
+			paubuttonElement.innerText= 'PAUSE';
+			allCubes.visible=true;
+		}
+   }
    }
    
    function init_after(){
@@ -329,6 +348,8 @@ scene.add(skyBox);
   
       var resbuttonElement = document.getElementById("restartbutton");
   document.body.appendChild(resbuttonElement);
+  var paubuttonElement = document.getElementById("pausebutton");
+  document.body.appendChild(paubuttonElement);
           var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
         allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
 	
@@ -367,6 +388,10 @@ scene.add(skyBox);
 			startGame = !startGame;
 			resbuttonElement.style.display = 'none';
 			resbuttonElement.disabled=true;
+			paubuttonElement.style.display = 'block';
+			paubuttonElement.disabled=false;
+			document.getElementById("scoreTitle1").style.display = 'none';
+			document.getElementById("score1").style.display = 'none';
 			INT = false; word = [];
 			secondscounter=120; minutecounter=2; totalpoints=0;
 			INVALID = 0;
@@ -393,7 +418,7 @@ scene.add(skyBox);
             if (!cube.isSelected) cube.material.color.setHex(0xffffff);
         }); //Update the color of the cubes 
 
-        if (intersects.length > 0 && !intersects[0].object.isSelected && INVALID==0) {
+        if (intersects.length > 0 && !intersects[0].object.isSelected && INVALID==0 && PAUSE==0) {
 
             intersects[0].object.material.color.setHex(0xC7F464); //Change the color of the nearest intersecting cube
             mainElement.style.cursor = 'pointer'; //Change the mouse pointer
@@ -416,7 +441,7 @@ scene.add(skyBox);
         var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
         var intersects = raycaster.intersectObjects(allCubes.children);
 
-        if (intersects.length > 0) {
+        if (intersects.length > 0 && PAUSE==0) {
             intCube = intersects[0].object;
             if (!intCube.isSelected) {
                 intersects[0].object.material.color.setHex(0xC44D58); //Change color on Selection
@@ -431,7 +456,7 @@ scene.add(skyBox);
     }
 
     function onDocumentKeyDown(event) {
-		if (event.keyCode == 13 && startGame==1) { //Keycode for Enter
+		if (event.keyCode == 90 && startGame==1) { //Keycode for Enter
             var currentWord = '';
             var totpot = 0;
             for (i = 0; i < word.length; i++) {
@@ -471,7 +496,7 @@ scene.add(skyBox);
             }
 
         }
-        if (event.keyCode == 8 && startGame==1) { //Keycode for Backspace
+        if (event.keyCode == 88 && startGame==1) { //Keycode for Backspace
             for (i = 0; i < word.length; i++) {
                 //Deselect the selected cubes
                 word[i].isSelected = 0;
@@ -505,12 +530,14 @@ scene.add(skyBox);
         renderer.setSize(window.innerWidth, window.innerHeight);
     }
 	function timer() {
-	if (minutecounter!=0 || secondscounter!=0) 
+	if ((minutecounter!=0 || secondscounter!=0)) 
 	{
+	if (PAUSE==0){
 	if ( (secondscounter%60) == 0) {
     minutecounter = minutecounter - 1;}
 	secondscounter = secondscounter - 1;
 	addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+	}
 	}
 	else {
 	while (allCubes.children.length != 0) {
@@ -520,8 +547,12 @@ scene.add(skyBox);
 	window.clearInterval(mytimer);
 	startGame=0;
 	document.getElementById("restartbutton").style.display = 'block';
-		document.getElementById("restartbutton").disabled = false;
-
+	document.getElementById("restartbutton").disabled = false;
+	document.getElementById("scoreTitle1").style.display = 'block';
+	document.getElementById("score1").style.display = 'block';
+	document.getElementById("score1").innerText = totalpoints;
+	document.getElementById("pausebutton").style.display = 'none';
+	document.getElementById("pausebutton").disabled=true;
 	}
 	}
 	
@@ -542,7 +573,7 @@ scene.add(skyBox);
         requestAnimationFrame(animate);
 
         render();
-		if (r==126) {
+		if (r==102) {
 		display();
 		r=r+1;
 		} 
@@ -551,18 +582,18 @@ scene.add(skyBox);
     }
 
     function render() {
-		//pausescreen();
-		/*plane.rotation.x = camera.rotation.x;
-        plane.rotation.y = camera.rotation.y;
-        plane.rotation.z = camera.rotation.z;*/
         controls.update(); //Update the controls
         renderer.render(scene, camera); //Render the scene and camera
-		if (r<=125) {
-		textMesh.position.set( 0-0.5*textWidth,0, -700+Math.sqrt(r)*r/1.5 );
+		if (r<=100) {
+		textMesh.position.set( 0-0.5*textWidth,30, -700+Math.sqrt(r)*r/1.5 );
 		r=r+1;}
-		if (r==126) {
-		scene.remove(textMesh);
+		if (r==101){
+		if (vib<51){
+		textMesh.position.z += 0.3;
+		vib=vib+1;
 		}
+		if (vib==51) r=r+1}
+		
         if (INT) { //Rotate the cube on intersection
             intCube.rotation.x += 0.05;
             intCube.rotation.y += 0.02;
@@ -572,9 +603,9 @@ scene.add(skyBox);
 		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
 		
 		if(inv<15){
-		camera.position.x += 3*Math.cos(2*3.14*0.2*inv);
-		camera.position.y += 1.5*Math.cos(2*3.14*0.2*inv);
-        camera.position.z -= 3*Math.cos(2*3.14*0.2*inv);
+		camera.position.x += 3*Math.cos(2*3.14*inv/15);
+		camera.position.y += 1.5*Math.cos(2*3.14*inv/15);
+        camera.position.z -= 3*Math.cos(2*3.14*inv/15);
 		}
 		else if(inv<50){
 		    document.getElementById("invalidword").style.display = 'block';
