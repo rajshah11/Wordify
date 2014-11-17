@@ -8,7 +8,7 @@ function generateTexture(letter){
 	ctx.fillRect(0,0,200,200);
 
 	ctx.textAlign = "center";
-	ctx.fillStyle = "#774F38";
+	ctx.fillStyle = "#556270";
 	ctx.fillText(letter, 0.5*bitmap.width, 0.6*bitmap.width);
 	ctx.font = '40px Calibri';
 	ctx.fillText(getPoints(letter), 0.9*bitmap.width, 0.2*bitmap.width);
