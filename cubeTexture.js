@@ -4,11 +4,11 @@ function generateTexture(letter){
 	bitmap.width = 200;
 	bitmap.height = 200;
 	ctx.font = '90px Calibri';
-	ctx.fillStyle = "#4ECDC4";
+	ctx.fillStyle = "#EFFAB4";
 	ctx.fillRect(0,0,200,200);
 
 	ctx.textAlign = "center";
-	ctx.fillStyle = "#FF6B6B";
+	ctx.fillStyle = "#774F38";
 	ctx.fillText(letter, 0.5*bitmap.width, 0.6*bitmap.width);
 	ctx.font = '40px Calibri';
 	ctx.fillText(getPoints(letter), 0.9*bitmap.width, 0.2*bitmap.width);
