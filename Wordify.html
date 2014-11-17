@@ -122,11 +122,11 @@
 		document.getElementById("creditsbutton").style.bottom = window.innerHeight/2-290+"px"; //Position of the main divison
 		document.getElementById("creditsbutton").style.left = window.innerWidth-150+5 + "px";
 
-		document.getElementById("creditsdialog").style.height = window.innerHeight/4.3+"px"; //Set the height of the main division
+		document.getElementById("creditsdialog").style.height = window.innerHeight/3.8+"px"; //Set the height of the main division
 		document.getElementById("creditsdialog").style.width = window.innerWidth/4+"px"; //Set the width of the main division
 		document.getElementById("creditsdialog").style.top = window.innerHeight/2.4+"px"; //Position of the main divison
 		document.getElementById("creditsdialog").style.left = window.innerWidth/2.6+ "px";
-		document.getElementById("creditsdialog").innerHTML = "<br>CREDITS<br><br>This game uses these sounds from freesound:<br>\"<a href='http://freesound.org/people/dermotte/'>o_o.wav</a>\" by dermotte<br>\"<a href='https://www.freesound.org/people/Adam_N/'>pan impact 6.wav</a>\" by Adam_N<br>Image Credits: <a href='http://www.eso.org/public/images/eso0932a/'>ESO/S. Brunier</a>";
+		document.getElementById("creditsdialog").innerHTML = "<br>CREDITS<br><br>This game uses following sounds from freesound:<br>\"<a href='http://freesound.org/people/dermotte/'>o_o.wav</a>\" by dermotte<br>\"<a href='https://www.freesound.org/people/Adam_N/'>pan impact 6.wav</a>\" by Adam_N<br>Background image credits: <a href='http://www.eso.org/public/images/eso0932a/'>ESO/S. Brunier</a>";
 	</script>
 
 	<!--Including all the javascript source files used-->
@@ -239,6 +239,7 @@
 			controls.panSpeed = 1;
 			controls.staticMoving = true;
 			controls.enabled=true;
+
 
 			var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.52); // Create a hemispherical light to show the MeshPhongMaterial objects
 
