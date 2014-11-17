@@ -130,14 +130,14 @@
 	</script>
 
 	<!--Including all the javascript source files used-->
-	<script src="three.js"></script>
-	<script src="./gameCube.js"></script>
-	<script src="./cubeTexture.js"></script>
+	<script src="js/libs/three.js"></script>
+	<script src="js/gameCube.js"></script>
+	<script src="js/cubeTexture.js"></script>
 	<script src="js/controls/TrackballControls.js"></script>
 	<script src="js/libs/stats.min.js"></script>
 	<script src="js/libs/soundjs-0.5.2.min.js"></script>
-	<script src="BJSpell.js"></script>
-	<script src="jquery-1.9.1.js"></script>
+	<script src="js/libs/BJSpell.js"></script>
+	<script src="js/libs/jquery-1.9.1.js"></script>
 	<script src="fonts/optimer_bold.typeface.js"></script>
 	<script src="fonts/optimer_regular.typeface.js"></script>
 	<script src="fonts/gentilis_bold.typeface.js"></script>
@@ -178,7 +178,7 @@
 		intCube, intCube1, PAUSE = false, isCreditsShown = false;
 		var word = [];
 		var camvec = new THREE.Vector3(),r=0;
-		var dictionary = new BJSpell("en_US.js");
+		var dictionary = new BJSpell("js/libs/en_US.js");
 		var secondscounter=120, minutecounter=2, totalpoints=0;
 		var startGame = 0, INVALID = 0, inv, vib=0;
 		function randLetter() { //Function to return a random letter
