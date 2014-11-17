@@ -240,10 +240,39 @@
 			controls.staticMoving = true;
 			controls.enabled=true;
 
-			var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.12); // Create a hemispherical light to show the MeshPhongMaterial objects
-			
+
+			var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.52); // Create a hemispherical light to show the MeshPhongMaterial objects
+
 			scene = new THREE.Scene(); //Initializing the scene
 
+				var ambient = new THREE.AmbientLight( 0xffffff );
+				ambient.color.setHSL( 0.1, 0.3, 0.2 );
+				scene.add( ambient );
+
+
+				var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+				dirLight.position.set( 0, -1, 0 ).normalize();
+				scene.add( dirLight );
+
+				dirLight.color.setHSL( 0.1, 0.7, 0.5 );
+
+
+				addLight( 0.08, 0.8, 0.5,    0, 0, -1000 );
+				addLight( 0.08, 0.8, 0.5,    0, 0, 2600 );
+				addLight( 0.08, 0.8, 0.5, 5000, 5000, -1000 );
+				addLight( 0.12, 0.2, 0.4, -1000, -1000, -5000);
+				addLight( 0.12, 0.2, 0.4, -1000, 0, 450);
+				addLight( 0.12, 0.2, 0.4, -1750, 2500, 450);
+				addLight( 0.12, 0.2, 0.4, -1750, 2500, 450);
+				
+				function addLight( h, s, l, x, y, z ) {
+
+					var light = new THREE.PointLight( 0xffffff, 1.5, 4500 );
+					light.color.setHSL( h, s, l );
+					light.position.set( x, y, z );
+					scene.add( light );
+
+				}
 			var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
 			allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
 
@@ -667,6 +696,7 @@ function init_after(){
 			}
 			inv=inv+1;
 		}
+		console.log(camera.position);
 	}
 </script>
 
