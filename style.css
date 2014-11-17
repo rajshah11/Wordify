@@ -92,6 +92,24 @@ body {
         cursor: pointer;
     }
 
+    .btn-small {
+        color: #fff;
+        background-color: #e74c3c;
+        font-weight: bold;
+        border: 2px solid #fff;
+        font-family: 'DINCond';
+        font-size: 22px;
+        font-weight: bold;
+        border-radius: 6px;
+    }
+     
+    .btn-small:hover {
+        color: #e74c3c;
+        background-color: #fff;
+        border: 2px solid #e74c3c;
+        cursor: pointer;
+    }
+
     #invalidword{
     	position:absolute;
     	display:none;
@@ -137,10 +155,13 @@ body {
         font-weight: bold;
     }
 
-    #help{
+    #help {
         opacity: 0.8;
         position: absolute;
         display: none;
+        }
+
+    .infobox {
         color: #fff;
         background-color: #fa6151;
         font-family: 'DINCond';
@@ -149,3 +170,26 @@ body {
         text-align: center;
         border: 2px solid #fff;
         }
+
+    #creditsbutton {
+        opacity: 1;
+        position: absolute;
+        display: none;
+    }
+
+    #creditsdialog {
+        position:absolute;
+        display:none;
+    }
+
+    .dialog {
+        color: #e74c3c;
+        background-color: #fff;
+        border: 2px solid #e74c3c;
+        font-family: 'DINCond';
+        font-size: 18px;
+        border-radius: 6px;
+        text-align: center;
+        font-weight: bold;
+        z-index: 1;
+    }

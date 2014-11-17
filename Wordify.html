@@ -1,654 +1,684 @@
-<!--
-Introduction to Computer Graphics | Fall 2014 | IIT Gandhinagar
-Pankaj Gautam [11110060]
-Parth Sane [11110063]
-Raj Shah [11110077]
+	<!--
+	Introduction to Computer Graphics | Fall 2014 | IIT Gandhinagar
+	Pankaj Gautam [11110060]
+	Parth Sane [11110063]
+	Raj Shah [11110077]
 -->
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Wordify</title>
-    <!--Title of the HTML page-->
-    <link rel="stylesheet" href="style.css">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<title>Wordify</title>
+	<!--Title of the HTML page-->
+	<link rel="stylesheet" href="style.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
-    <div id="main"></div>
+	<div id="main"></div>
 	<div id="clockTitle"></div>
-    <div id="clock"></div>
-    <div id="scoreTitle"></div>
+	<div id="clock"></div>
+	<div id="scoreTitle"></div>
 	<div id="score"></div>
-    <div id="wordTitle"></div>
+	<div id="wordTitle"></div>
 	<div id="wordlist"></div>
 	<button class="btn" type="button" id="startbutton" autofocus="true">START</button>
-    <div id="help"></div>
-    
+	<div id="help" class="infobox"></div>
 
-	<div id="scoreTitle1"></div>
-	<div id="score1"></div>
+
+	<div id="score1" class="infobox"></div>
 	<button class="btn" type="button" id="pausebutton" autofocus="true">PAUSE</button>
 	<div id="invalidword" class="notif"></div>
 	<button class="btn" type="button" id="restartbutton" autofocus="true">RESTART</button>
-    <!--Creating an HTML division-->
+	<button class="btn-small" type="button" id="creditsbutton" autofocus="false">CREDITS</button>
+	<div id="creditsdialog" class="dialog">
+	</div>
+
+	<!--Creating an HTML division-->
 
 </head>
 
 <body>
-    <script>
-    document.getElementById("main").style.height = window.innerHeight + "px"; //Set the height of the main division
-    document.getElementById("main").style.width = window.innerWidth + "px"; //Set the width of the main division
-    document.getElementById("main").style.top = "0px"; //Position of the main divison
-    document.getElementById("main").style.left = "0px";
+	<script>
+		document.getElementById("main").style.height = window.innerHeight + "px"; //Set the height of the main division
+		document.getElementById("main").style.width = window.innerWidth + "px"; //Set the width of the main division
+		document.getElementById("main").style.top = "0px"; //Position of the main divison
+		document.getElementById("main").style.left = "0px";
 
-    document.getElementById("clockTitle").style.height = "34px"; //Set the height of the main division
-    document.getElementById("clockTitle").style.width = "150px"; //Set the width of the main division
-    document.getElementById("clockTitle").style.top = "10px"; //Position of the main divison
-    document.getElementById("clockTitle").style.left = window.innerWidth-150-10 + "px";
-    document.getElementById("clockTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("clockTitle").innerHTML = "&nbsp;TIME";
+		document.getElementById("clockTitle").style.height = "34px"; //Set the height of the main division
+		document.getElementById("clockTitle").style.width = "150px"; //Set the width of the main division
+		document.getElementById("clockTitle").style.top = "10px"; //Position of the main divison
+		document.getElementById("clockTitle").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("clockTitle").style.backgroundColor = '#2190c1';
+		document.getElementById("clockTitle").innerHTML = "&nbsp;TIME";
 
-	document.getElementById("clock").style.height = "27px"; //Set the height of the main division
-    document.getElementById("clock").style.width = "150px"; //Set the width of the main division
-    document.getElementById("clock").style.top = "45px"; //Position of the main divison
-    document.getElementById("clock").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("clock").style.backgroundColor = '#1b6d96';
-	
-    document.getElementById("scoreTitle").style.height = "34px"; //Set the height of the main division
-    document.getElementById("scoreTitle").style.width = "150px"; //Set the width of the main division
-    document.getElementById("scoreTitle").style.top = "90px"; //Position of the main divison
-    document.getElementById("scoreTitle").style.left = window.innerWidth-150-10 + "px";
-    document.getElementById("scoreTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("scoreTitle").innerHTML = "&nbsp;SCORE";
+		document.getElementById("clock").style.height = "27px"; //Set the height of the main division
+		document.getElementById("clock").style.width = "150px"; //Set the width of the main division
+		document.getElementById("clock").style.top = "45px"; //Position of the main divison
+		document.getElementById("clock").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("clock").style.backgroundColor = '#1b6d96';
+		
+		document.getElementById("scoreTitle").style.height = "34px"; //Set the height of the main division
+		document.getElementById("scoreTitle").style.width = "150px"; //Set the width of the main division
+		document.getElementById("scoreTitle").style.top = "90px"; //Position of the main divison
+		document.getElementById("scoreTitle").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("scoreTitle").style.backgroundColor = '#2190c1';
+		document.getElementById("scoreTitle").innerHTML = "&nbsp;SCORE";
 
-    document.getElementById("score").style.height = "27px"; //Set the height of the main division
-    document.getElementById("score").style.width = "150px"; //Set the width of the main division
-    document.getElementById("score").style.top = "125px"; //Position of the main divison
-    document.getElementById("score").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("score").style.backgroundColor = '#1b6d96';
-    
-    document.getElementById("wordTitle").style.height = "34px"; //Set the height of the main division
-    document.getElementById("wordTitle").style.width = "150px"; //Set the width of the main division
-    document.getElementById("wordTitle").style.top = "170px"; //Position of the main divison
-    document.getElementById("wordTitle").style.left = window.innerWidth-150-10 + "px";
-    document.getElementById("wordTitle").style.backgroundColor = '#2190c1';
-    document.getElementById("wordTitle").innerHTML = "&nbsp;WORDS";
+		document.getElementById("score").style.height = "27px"; //Set the height of the main division
+		document.getElementById("score").style.width = "150px"; //Set the width of the main division
+		document.getElementById("score").style.top = "125px"; //Position of the main divison
+		document.getElementById("score").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("score").style.backgroundColor = '#1b6d96';
+		
+		document.getElementById("wordTitle").style.height = "34px"; //Set the height of the main division
+		document.getElementById("wordTitle").style.width = "150px"; //Set the width of the main division
+		document.getElementById("wordTitle").style.top = "170px"; //Position of the main divison
+		document.getElementById("wordTitle").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("wordTitle").style.backgroundColor = '#2190c1';
+		document.getElementById("wordTitle").innerHTML = "&nbsp;WORDS";
 
-	document.getElementById("wordlist").style.height = "350px"; //Set the height of the main division
-	document.getElementById("wordlist").style.width = "150px"; //Set the width of the main division
-    document.getElementById("wordlist").style.top = "205px"; //Position of the main divison
-    document.getElementById("wordlist").style.left = window.innerWidth-150-10 + "px";
-	document.getElementById("wordlist").style.backgroundColor = '#1b6d96';
-	
-	document.getElementById("startbutton").style.height = "50px"; //Set the height of the main division
-	document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
-    document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
-    document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
+		document.getElementById("wordlist").style.height = "350px"; //Set the height of the main division
+		document.getElementById("wordlist").style.width = "150px"; //Set the width of the main division
+		document.getElementById("wordlist").style.top = "205px"; //Position of the main divison
+		document.getElementById("wordlist").style.left = window.innerWidth-150-10 + "px";
+		document.getElementById("wordlist").style.backgroundColor = '#1b6d96';
+		
+		document.getElementById("startbutton").style.height = "50px"; //Set the height of the main division
+		document.getElementById("startbutton").style.width = "200px"; //Set the width of the main division
+		document.getElementById("startbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
+		document.getElementById("startbutton").style.left = window.innerWidth/2-100 + "px";
 
-    document.getElementById("help").style.height = "250px"; //Set the height of the main division
-    document.getElementById("help").style.width = "200px"; //Set the width of the main division
-    document.getElementById("help").style.top = window.innerHeight/2-25+50+20+"px"; //Position of the main divison
-    document.getElementById("help").style.left = window.innerWidth/2-100 + "px";    
-	document.getElementById("help").innerHTML = "<b>KEYMAP</b><br>Z&nbsp;:&nbsp;Submit Word<br>X&nbsp;:&nbsp;Undo Selection<br>R&nbsp;:&nbsp;Reset View<br><br><b>HINTS</b><br>X, Z and Q get you more points than A, E and U.<br>Longer the words, higher the score.";
-	
-    document.getElementById("invalidword").style.height = window.innerHeight/6.4+"px"; //Set the height of the main division
-	document.getElementById("invalidword").style.width = window.innerWidth/4+"px"; //Set the width of the main division
-    document.getElementById("invalidword").style.top = window.innerHeight/2.8+"px"; //Position of the main divison
-    document.getElementById("invalidword").style.left = window.innerWidth/2.6+ "px";
-	document.getElementById("invalidword").innerHTML = "<br>INVALID WORD";
-	
-	document.getElementById("restartbutton").style.height = "50px"; //Set the height of the main division
-	document.getElementById("restartbutton").style.width = "200px"; //Set the width of the main division
-    document.getElementById("restartbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
-    document.getElementById("restartbutton").style.left = window.innerWidth/2-100 + "px";
-	
-	document.getElementById("scoreTitle1").style.height = "34px"; //Set the height of the main division
-    document.getElementById("scoreTitle1").style.width = "200px"; //Set the width of the main division
-    document.getElementById("scoreTitle1").style.top = window.innerHeight/2+35+"px"; //Position of the main divison
-    document.getElementById("scoreTitle1").style.left = window.innerWidth/2-100 + "px";
-    document.getElementById("scoreTitle1").style.backgroundColor = '#2190c1';
-    document.getElementById("scoreTitle1").innerText = "SCORE";
+		document.getElementById("help").style.height = "250px"; //Set the height of the main division
+		document.getElementById("help").style.width = "196px"; //Set the width of the main division
+		document.getElementById("help").style.top = window.innerHeight/2-25+50+20+"px"; //Position of the main divison
+		document.getElementById("help").style.left = window.innerWidth/2-100 + "px";    
+		document.getElementById("help").innerHTML = "<b>KEYMAP</b><br>Z : Submit Word<br>X : Undo Selection<br>R : Reset View<br><br><b>HINTS</b><br>X, Z and Q get you more points than A, E and U.<br>Longer the words, higher the score.";
+		
+		document.getElementById("score1").style.height = "60px"; //Set the height of the main division
+		document.getElementById("score1").style.width = "196px"; //Set the width of the main division
+		document.getElementById("score1").style.top = window.innerHeight/2+30+"px"; //Position of the main divison
+		document.getElementById("score1").style.left = window.innerWidth/2-100 + "px";
 
-    document.getElementById("score1").style.height = "27px"; //Set the height of the main division
-    document.getElementById("score1").style.width = "200px"; //Set the width of the main division
-    document.getElementById("score1").style.top = window.innerHeight/2+70+"px"; //Position of the main divison
-    document.getElementById("score1").style.left = window.innerWidth/2-100 + "px";
-	document.getElementById("score1").style.backgroundColor = '#1b6d96';
-	
-	document.getElementById("pausebutton").style.height = "50px"; //Set the height of the main division
-	document.getElementById("pausebutton").style.width = "200px"; //Set the width of the main division
-    document.getElementById("pausebutton").style.top = 10+"px"; //Position of the main divison
-    document.getElementById("pausebutton").style.left = window.innerWidth/2-100 + "px";
-	document.getElementById("pausebutton").innerText = "PAUSE";
-    </script>
+		document.getElementById("invalidword").style.height = window.innerHeight/6.4+"px"; //Set the height of the main division
+		document.getElementById("invalidword").style.width = window.innerWidth/4+"px"; //Set the width of the main division
+		document.getElementById("invalidword").style.top = window.innerHeight/2.8+"px"; //Position of the main divison
+		document.getElementById("invalidword").style.left = window.innerWidth/2.6+ "px";
+		document.getElementById("invalidword").innerHTML = "<br>INVALID WORD";
+		
+		document.getElementById("restartbutton").style.height = "50px"; //Set the height of the main division
+		document.getElementById("restartbutton").style.width = "200px"; //Set the width of the main division
+		document.getElementById("restartbutton").style.top = window.innerHeight/2-25+"px"; //Position of the main divison
+		document.getElementById("restartbutton").style.left = window.innerWidth/2-100 + "px";
+		
+		document.getElementById("pausebutton").style.height = "50px"; //Set the height of the main division
+		document.getElementById("pausebutton").style.width = "200px"; //Set the width of the main division
+		document.getElementById("pausebutton").style.top = 10+"px"; //Position of the main divison
+		document.getElementById("pausebutton").style.left = window.innerWidth/2-100 + "px";
+		document.getElementById("pausebutton").innerText = "PAUSE";
 
-    <!--Including all the javascript source files used-->
-    <script src="three.js"></script>
-    <script src="./gameCube.js"></script>
-    <script src="./cubeTexture.js"></script>
-    <script src="js/controls/TrackballControls.js"></script>
-    <script src="js/libs/stats.min.js"></script>
-    <script src="js/libs/soundjs-0.5.2.min.js"></script>
+		document.getElementById("creditsbutton").style.height = "35px"; //Set the height of the main division
+		document.getElementById("creditsbutton").style.width = "120px"; //Set the width of the main division
+		document.getElementById("creditsbutton").style.bottom = window.innerHeight/2-290+"px"; //Position of the main divison
+		document.getElementById("creditsbutton").style.left = window.innerWidth-150+5 + "px";
+
+		document.getElementById("creditsdialog").style.height = window.innerHeight/4.3+"px"; //Set the height of the main division
+		document.getElementById("creditsdialog").style.width = window.innerWidth/4+"px"; //Set the width of the main division
+		document.getElementById("creditsdialog").style.top = window.innerHeight/2.45+"px"; //Position of the main divison
+		document.getElementById("creditsdialog").style.left = window.innerWidth/2.6+ "px";
+		document.getElementById("creditsdialog").innerHTML = "<br>CREDITS<br><br>This game uses these sounds from freesound:<br>\"<a href='http://freesound.org/people/dermotte/'>o_o.wav</a>\" by dermotte<br>\"<a href='https://www.freesound.org/people/Adam_N/'>pan impact 6.wav</a>\" by Adam_N";
+	</script>
+
+	<!--Including all the javascript source files used-->
+	<script src="three.js"></script>
+	<script src="./gameCube.js"></script>
+	<script src="./cubeTexture.js"></script>
+	<script src="js/controls/TrackballControls.js"></script>
+	<script src="js/libs/stats.min.js"></script>
+	<script src="js/libs/soundjs-0.5.2.min.js"></script>
 	<script src="BJSpell.js"></script>
 	<script src="jquery-1.9.1.js"></script>
-		<script src="fonts/optimer_bold.typeface.js"></script>
-		<script src="fonts/optimer_regular.typeface.js"></script>
-		<script src="fonts/gentilis_bold.typeface.js"></script>
-		<script src="fonts/gentilis_regular.typeface.js"></script>
+	<script src="fonts/optimer_bold.typeface.js"></script>
+	<script src="fonts/optimer_regular.typeface.js"></script>
+	<script src="fonts/gentilis_bold.typeface.js"></script>
+	<script src="fonts/gentilis_regular.typeface.js"></script>
+
+	<script type="application/x-glsl" id="sky-vertex">
+		varying vec2 vUV;
+
+		void main() {
+			vUV = uv;
+			vec4 pos = vec4(position, 1.0);
+			gl_Position = projectionMatrix * modelViewMatrix * pos;
+		}
+	</script>
+
+	<script type="application/x-glsl" id="sky-fragment">
+		uniform sampler2D texture;
+		varying vec2 vUV;
+
+		void main() {
+			vec4 sample = texture2D(texture, vUV);
+			gl_FragColor = vec4(sample.xyz, sample.w);
+		}
+	</script>
+
+	<script>
+		 //Adding a looking mechanism
+		 THREE.Utils = {
+		 	cameraLookDir: function(camera) {
+		 		var vector = new THREE.Vector3(0, 0, -1);
+		 		vector.applyEuler(camera.rotation, camera.eulerOrder);
+		 		return vector;
+		 	}
+		 };
+		 var mainElement;
+		 var camera, scene, projector, controls, renderer, plane, allCubes, mouse = new THREE.Vector2();
+		var INT = false,	//Boolean variable used for representing intersections
+		intCube, intCube1, PAUSE = false, isCreditsShown = false;
+		var word = [];
+		var camvec = new THREE.Vector3(),r=0;
+		var dictionary = new BJSpell("en_US.js");
+		var secondscounter=120, minutecounter=2, totalpoints=0;
+		var startGame = 0, INVALID = 0, inv, vib=0;
+		function randLetter() { //Function to return a random letter
+			var letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
+			return letters.substr(Math.floor(Math.random() * 98), 1);
+		}
 		
-		<script type="application/x-glsl" id="sky-vertex">
-varying vec2 vUV;
-
-void main() {
-  vUV = uv;
-  vec4 pos = vec4(position, 1.0);
-  gl_Position = projectionMatrix * modelViewMatrix * pos;
-}
-</script>
-
-<script type="application/x-glsl" id="sky-fragment">
-uniform sampler2D texture;
-varying vec2 vUV;
-
-void main() {
-  vec4 sample = texture2D(texture, vUV);
-  gl_FragColor = vec4(sample.xyz, sample.w);
-}
-</script>
-
-    <script>
-	 //Adding a looking mechanism
-    THREE.Utils = {
-    cameraLookDir: function(camera) {
-        var vector = new THREE.Vector3(0, 0, -1);
-        vector.applyEuler(camera.rotation, camera.eulerOrder);
-        return vector;
-    }
-	};
-    var mainElement;
-    var camera, scene, projector, controls, renderer, plane, allCubes, mouse = new THREE.Vector2();
-    var INT = false,	//Boolean variable used for representing intersections
-        intCube, intCube1, PAUSE = false;
-    var word = [];
-    var camvec = new THREE.Vector3(),r=0;
-	var dictionary = new BJSpell("en_US.js");
-	var secondscounter=120, minutecounter=2, totalpoints=0;
-	var startGame = 0, INVALID = 0, inv, vib=0;
-    function randLetter() { //Function to return a random letter
-        var letters = "AAAAAAAAABBCCDDDDEEEEEEEEEEEEFFGGGHHIIIIIIIIIJKLLLLMMNNNNNNOOOOOOOOPPQRRRRRRSSSSTTTTTTUUUUVVWWXYYZ";
-        return letters.substr(Math.floor(Math.random() * 98), 1);
-    }
-	
-			var material1 = new THREE.MeshPhongMaterial({color: 0xffffff});
+		var material1 = new THREE.MeshPhongMaterial({color: 0xffffff});
 		var textgeom = new THREE.TextGeometry('wordify',{size:25, height:5,
-							curveSegments:4, font:"gentilis", weight:"bold",
-							style:"normal"});
-		 var textMesh = new THREE.Mesh( textgeom, material1 );
-    textgeom.computeBoundingBox();
-    var textWidth = textgeom.boundingBox.max.x - textgeom.boundingBox.min.x;
-    textMesh.position.set( 0-0.5*textWidth,0, -100 );
-	
-	
-    init(); //Calling the init and animate functions
-    animate();
-	
-    function init() {
-        mainElement = document.getElementById("main"); //Get element "main"
-        document.body.appendChild(mainElement);
-  var clockElement = document.getElementById("clock");
-  document.body.appendChild(clockElement);
-  addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
-    var scoreElement = document.getElementById("score");
-  document.body.appendChild(scoreElement);
- document.getElementById("score").innerHTML = "&nbsp;0";
-      var wordlistElement = document.getElementById("wordlist");
-  document.body.appendChild(wordlistElement);
-    document.body.appendChild(wordlistElement);
-  var sbuttonElement = document.getElementById("startbutton");
-  document.body.appendChild(sbuttonElement);
-  var helpElement = document.getElementById("help");
-  document.body.appendChild(helpElement);
-    var invwordElement = document.getElementById("invalidword");
-  document.body.appendChild(invwordElement);
-   var resbuttonElement = document.getElementById("restartbutton");
-  document.body.appendChild(resbuttonElement);
-     var paubuttonElement = document.getElementById("pausebutton");
-  document.body.appendChild(paubuttonElement);
-  createjs.Sound.registerSound({id:"ahoh_Sound", src:"./sounds/165854__dermotte__o-o.wav"});
-  createjs.Sound.registerSound({id:"knock_Sound", src:"./sounds/164579__adam-n__pan-impact-6.wav"});
-createjs.Sound.addEventListener("fileload", handleFileLoad);
-        camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
-        camera.position.z = 250;
-        camera.lookAt(new THREE.Vector3(0, 0, 0));
+			curveSegments:4, font:"gentilis", weight:"bold",
+			style:"normal"});
+		var textMesh = new THREE.Mesh( textgeom, material1 );
+		textgeom.computeBoundingBox();
+		var textWidth = textgeom.boundingBox.max.x - textgeom.boundingBox.min.x;
+		textMesh.position.set( 0-0.5*textWidth,0, -100 );
+		
+		
+		init(); //Calling the init and animate functions
+		animate();
+		
+		function init() {
+			mainElement = document.getElementById("main"); //Get element "main"
+			document.body.appendChild(mainElement);
+			var clockElement = document.getElementById("clock");
+			document.body.appendChild(clockElement);
+			addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+			var scoreElement = document.getElementById("score");
+			document.body.appendChild(scoreElement);
+			document.getElementById("score").innerHTML = "&nbsp;0";
+			var wordlistElement = document.getElementById("wordlist");
+			document.body.appendChild(wordlistElement);
+			document.body.appendChild(wordlistElement);
+			var sbuttonElement = document.getElementById("startbutton");
+			document.body.appendChild(sbuttonElement);
+			var creditsButtonElement = document.getElementById("creditsbutton");
+			document.body.appendChild(creditsButtonElement);
+			var creditsElement = document.getElementById("creditsdialog");
+			document.body.appendChild(creditsElement);
+			var helpElement = document.getElementById("help");
+			document.body.appendChild(helpElement);
+			var invwordElement = document.getElementById("invalidword");
+			document.body.appendChild(invwordElement);
+			var resbuttonElement = document.getElementById("restartbutton");
+			document.body.appendChild(resbuttonElement);
+			var paubuttonElement = document.getElementById("pausebutton");
+			document.body.appendChild(paubuttonElement);
+			createjs.Sound.registerSound({id:"ahoh_Sound", src:"./sounds/165854__dermotte__o-o.wav"});
+			createjs.Sound.registerSound({id:"knock_Sound", src:"./sounds/164579__adam-n__pan-impact-6.wav"});
+			createjs.Sound.addEventListener("fileload", handleFileLoad);
+			camera = new THREE.PerspectiveCamera(45, (window.innerWidth) / window.innerHeight, 1, 10000); //Initializing the camera
+			camera.position.z = 250;
+			camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 
-        controls = new THREE.TrackballControls(camera); //Initializing TrackballControls (it uses TrackballControls.js) 
-        controls.rotateSpeed = 7;
-        controls.zoomSpeed = 2;
-        controls.panSpeed = 1;
-        controls.staticMoving = true;
-		controls.enabled=false;
+			controls = new THREE.TrackballControls(camera); //Initializing TrackballControls (it uses TrackballControls.js) 
+			controls.rotateSpeed = 7;
+			controls.zoomSpeed = 2;
+			controls.panSpeed = 1;
+			controls.staticMoving = true;
+			controls.enabled=false;
 
-        var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.12); // Create a hemispherical light to show the MeshPhongMaterial objects
+			var light = new THREE.HemisphereLight(0xffffff, 0xffffff, 1.12); // Create a hemispherical light to show the MeshPhongMaterial objects
 
-        scene = new THREE.Scene(); //Initializing the scene
+			scene = new THREE.Scene(); //Initializing the scene
 
-        var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
-        allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
-	
-		var smaterial = new THREE.MeshPhongMaterial({
-                map: generateStartTexture()
-            });
-			
+			var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
+			allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
+
+			var smaterial = new THREE.MeshPhongMaterial({
+				map: generateStartTexture()
+			});
+
 			var startcube = new MyGameCube(geom, smaterial);
 
-        var i;
-        for (i = 0; i < 100; i++) { //Generate 100 random cubes
-            var letter = randLetter(); //Get a letter using randLetter function
+			var i;
+			for (i = 0; i < 100; i++) { //Generate 100 random cubes
+				var letter = randLetter(); //Get a letter using randLetter function
 
-            //Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
-            var material = new THREE.MeshPhongMaterial({
-                map: generateTexture(letter)
-            });
+				//Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
+				var material = new THREE.MeshPhongMaterial({
+					map: generateTexture(letter)
+				});
 
-            //Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
-            var cube = new MyGameCube(geom, material);
+				//Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
+				var cube = new MyGameCube(geom, material);
 
-            cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
-            cube.position.y = (-Math.random() + 0.5) * 150;
-            cube.position.z = (-Math.random() + 0.5) * 150;
+				cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
+				cube.position.y = (-Math.random() + 0.5) * 150;
+				cube.position.z = (-Math.random() + 0.5) * 150;
 
-            cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
-            cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
-            cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
+				cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
+				cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
+				cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
 
-            cube.letter = letter; //Assign the letter to this cube
-            allCubes.add(cube); //Add the cube to allCubes
-        }
-        //scene.add(allCubes); //Add allCubes to the scene
-		
-
-		scene.add(textMesh);
-        scene.add(light); //Add light to the scene
-	
-	var skygeometry = new THREE.SphereGeometry(750, 6, 4);
-	THREE.ImageUtils.crossOrigin = '';
-	var uniforms = {
-	  texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
-	};
-
-	var skymaterial = new THREE.ShaderMaterial( {
-	  uniforms:       uniforms,
-	  vertexShader:   document.getElementById('sky-vertex').textContent,
-	  fragmentShader: document.getElementById('sky-fragment').textContent
-	});
-
-	skyBox = new THREE.Mesh(skygeometry, skymaterial);
-	skyBox.scale.set(-1, 1, 1);
-	skyBox.eulerOrder = 'XZY';
-	skyBox.renderDepth = 1000.0;
-	scene.add(skyBox);
-
-        projector = new THREE.Projector(); //Create a new projector
-
-        renderer = new THREE.WebGLRenderer({
-            antialias: true
-        }); //Create a new renderer
-        renderer.setClearColor(0xF0F0FF); //Set the renderer color
-        renderer.setSize(window.innerWidth, window.innerHeight); //Set the renderer size
-
-        mainElement.appendChild(renderer.domElement); //Append the renderer element to the main element
-
-        stats = new Stats(); //Create a stats object using Stats function in Stats.js
-        stats.domElement.style.position = 'absolute';
-        stats.domElement.style.top = '0px';
-        mainElement.appendChild(stats.domElement); //Append the stats element to the main element
-		
-        renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false); //Add Mouse Move event listener
-        renderer.domElement.addEventListener('click', onDocumentMouseDown, false);
-        window.addEventListener('keydown', onDocumentKeyDown, false); //Add Key Down event listener
-        window.addEventListener('resize', onWindowResize, false);
-		  sbuttonElement.onclick = function(){
-  	        if(startGame==0){
-			controls.enabled = true;
-			startGame = !startGame;
-			sbuttonElement.style.display = 'none';
-			sbuttonElement.disabled=true;
-            helpElement.style.display = 'none';
-            scene.add(allCubes);
-			paubuttonElement.style.display = 'block';
-			paubuttonElement.disabled=false;
-        	scene.add(allCubes);
-			scene.remove(textMesh);
-			mytimer = window.setInterval(function(){timer()}, 1000);
-        }
-  }
-		resbuttonElement.onclick = function(){
-  	        if(startGame==0){
-			controls.enabled = true;
-			startGame = !startGame;
-			resbuttonElement.style.display = 'none';
-			resbuttonElement.disabled=true;			
-			paubuttonElement.style.display = 'block';
-			paubuttonElement.disabled=false;
-			document.getElementById("scoreTitle1").style.display = 'none';
-			document.getElementById("score1").style.display = 'none';
-			INT = false; word = [];
-			secondscounter=120; minutecounter=2; totalpoints=0;
-			INVALID = 0;
-			init_after();
-			scene.add(allCubes);
-			mytimer = window.setInterval(function(){timer()}, 1000);
-        }
-  }
-		paubuttonElement.onclick = function(){
-  	        PAUSE=!PAUSE;
-			if (PAUSE){
-			controls.enabled = false;
-			paubuttonElement.innerText= 'RESUME';
-			allCubes.visible=false;
-        }
-			if(!PAUSE){
-			controls.enabled = true;
-			paubuttonElement.innerText= 'PAUSE';
-			allCubes.visible=true;
-		}
-   }
-function handleFileLoad(event) {
-    // A sound has been preloaded.
-    console.log("Preloaded:", event.id, event.src);
-}
-   }
-
-
-   function init_after(){
-  addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
- document.getElementById("score").innerText = "0";
-  document.getElementById("wordlist").innerText='';
-  
-      var resbuttonElement = document.getElementById("restartbutton");
-  document.body.appendChild(resbuttonElement);
-  var paubuttonElement = document.getElementById("pausebutton");
-  document.body.appendChild(paubuttonElement);
-          var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
-        allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
-	
-		var smaterial = new THREE.MeshPhongMaterial({
-                map: generateStartTexture()
-            });
-			
-			var startcube = new MyGameCube(geom, smaterial);
-
-        var i;
-        for (i = 0; i < 100; i++) { //Generate 100 random cubes
-            var letter = randLetter(); //Get a letter using randLetter function
-
-            //Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
-            var material = new THREE.MeshPhongMaterial({
-                map: generateTexture(letter)
-            });
-
-            //Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
-            var cube = new MyGameCube(geom, material);
-
-            cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
-            cube.position.y = (-Math.random() + 0.5) * 150;
-            cube.position.z = (-Math.random() + 0.5) * 150;
-
-            cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
-            cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
-            cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
-
-            cube.letter = letter; //Assign the letter to this cube
-            allCubes.add(cube); //Add the cube to allCubes
-        }
-		resbuttonElement.onclick = function(){
-  	        if(startGame==0){
-			controls.enabled = true;
-			startGame = !startGame;
-			resbuttonElement.style.display = 'none';
-			resbuttonElement.disabled=true;
-			paubuttonElement.style.display = 'block';
-			paubuttonElement.disabled=false;
-			document.getElementById("scoreTitle1").style.display = 'none';
-			document.getElementById("score1").style.display = 'none';
-			INT = false; word = [];
-			secondscounter=120; minutecounter=2; totalpoints=0;
-			INVALID = 0;
-			init_after();
-			scene.add(allCubes);
-			mytimer = window.setInterval(function(){timer()}, 1000);
-        }
-		}
-   }
-
-    function onDocumentMouseMove(event) {
-        event.preventDefault();
-        //Mouse Position
-        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
-        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
-
-        var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5); //Mouse Vector
-        projector.unprojectVector(mousevect, camera); //Unproject mouse vector using camera
-        //Cast a ray from camera position towards mouse position 
-        var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
-        var intersects = raycaster.intersectObjects(allCubes.children); //Get an array of objects that intersect the ray
-
-        allCubes.children.forEach(function(cube) {
-            if (!cube.isSelected) cube.material.color.setHex(0xffffff);
-        }); //Update the color of the cubes 
-
-        if (intersects.length > 0 && !intersects[0].object.isSelected && INVALID==0 && PAUSE==0) {
-
-            intersects[0].object.material.color.setHex(0xC7F464); //Change the color of the nearest intersecting cube
-            mainElement.style.cursor = 'pointer'; //Change the mouse pointer
-            INT = true;
-            intCube = intersects[0].object; //Assign first cube to intCube
-        } else {
-            INT = false;
-            mainElement.style.cursor = 'auto';
-        }
-
-    }
-
-    function onDocumentMouseDown(event) {
-        event.preventDefault();
-        mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
-        mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
-	
-        var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-        projector.unprojectVector(mousevect, camera);
-        var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
-        var intersects = raycaster.intersectObjects(allCubes.children);
-
-        if (intersects.length > 0 && PAUSE==0) {
-            intCube = intersects[0].object;
-            if (!intCube.isSelected) {
-                intersects[0].object.material.color.setHex(0xC44D58); //Change color on Selection
-                intersects[0].object.material.opacity = 1.5;
-                mainElement.style.cursor = 'pointer';
-                INT = false;
-                intCube.isSelected = 1; //Change the selected flag on selection
-                word.push(intCube); //Push the selected cubes to a dynamic array
-            }
-        }
-
-    }
-
-    function onDocumentKeyDown(event) {
-		if (event.keyCode == 90 && startGame==1) { //Keycode for Enter
-            var currentWord = '';
-            var totpot = 0;
-            for (i = 0; i < word.length; i++) {
-                //Extract the letters and points from the selected cubes to create a word and calculate the total points 
-                currentWord = currentWord + word[i].letter;
-                totpot = totpot + word[i].points();
-            }
-			if (dictionary.check(currentWord.toLowerCase()) && currentWord.length>2){
-			for (i = 0; i < word.length; i++) {
-			allCubes.remove(word[i]);
+				cube.letter = letter; //Assign the letter to this cube
+				allCubes.add(cube); //Add the cube to allCubes
 			}
-			if (currentWord.length>=3 && currentWord.length<=5) totalpoints=totalpoints+totpot*50;
-			else if (currentWord.length>=6 && currentWord.length<=8) totalpoints=totalpoints+totpot*75;
-			else if  (currentWord.length>=9 && currentWord.length<=10) totalpoints=totalpoints+totpot*100;
-			else if (currentWord.length>10) totalpoints=totalpoints+totpot*125
-			addscoretext("score", totalpoints);
-			addword("wordlist",currentWord);
-			//alert("Word:" + currentWord + "  Points:" + totpot); //Show the extracted word and total points
+			//scene.add(allCubes); //Add allCubes to the scene
+			
+
+			scene.add(textMesh);
+			scene.add(light); //Add light to the scene
+
+			var skygeometry = new THREE.SphereGeometry(750, 6, 4);
+			THREE.ImageUtils.crossOrigin = '';
+			var uniforms = {
+				texture: { type: 't', value: THREE.ImageUtils.loadTexture('http://i.imgur.com/gcKQsM1.jpg') }
+			};
+
+			var skymaterial = new THREE.ShaderMaterial( {
+				uniforms:       uniforms,
+				vertexShader:   document.getElementById('sky-vertex').textContent,
+				fragmentShader: document.getElementById('sky-fragment').textContent
+			});
+
+			skyBox = new THREE.Mesh(skygeometry, skymaterial);
+			skyBox.scale.set(-1, 1, 1);
+			skyBox.eulerOrder = 'XZY';
+			skyBox.renderDepth = 1000.0;
+			scene.add(skyBox);
+
+			projector = new THREE.Projector(); //Create a new projector
+
+			renderer = new THREE.WebGLRenderer({
+				antialias: true
+			}); //Create a new renderer
+			renderer.setClearColor(0xF0F0FF); //Set the renderer color
+			renderer.setSize(window.innerWidth, window.innerHeight); //Set the renderer size
+
+			mainElement.appendChild(renderer.domElement); //Append the renderer element to the main element
+
+			stats = new Stats(); //Create a stats object using Stats function in Stats.js
+			stats.domElement.style.position = 'absolute';
+			stats.domElement.style.top = '0px';
+			mainElement.appendChild(stats.domElement); //Append the stats element to the main element
+			
+			renderer.domElement.addEventListener('mousemove', onDocumentMouseMove, false); //Add Mouse Move event listener
+			renderer.domElement.addEventListener('click', onDocumentMouseDown, false);
+			window.addEventListener('keydown', onDocumentKeyDown, false); //Add Key Down event listener
+			window.addEventListener('resize', onWindowResize, false);
+			sbuttonElement.onclick = function(){
+				if(startGame==0){
+					controls.enabled = true;
+					startGame = !startGame;
+					sbuttonElement.style.display = 'none';
+					sbuttonElement.disabled=true;
+					helpElement.style.display = 'none';
+					scene.add(allCubes);
+					paubuttonElement.style.display = 'block';
+					paubuttonElement.disabled=false;
+					scene.add(allCubes);
+					scene.remove(textMesh);
+					mytimer = window.setInterval(function(){timer()}, 1000);
+				}
+			}
+			resbuttonElement.onclick = function(){
+				if(startGame==0){
+					controls.enabled = true;
+					startGame = !startGame;
+					resbuttonElement.style.display = 'none';
+					resbuttonElement.disabled=true;			
+					paubuttonElement.style.display = 'block';
+					paubuttonElement.disabled=false;
+					document.getElementById("score1").style.display = 'none';
+					INT = false; word = [];
+					secondscounter=120; minutecounter=2; totalpoints=0;
+					INVALID = 0;
+					init_after();
+					scene.add(allCubes);
+					mytimer = window.setInterval(function(){timer()}, 1000);
+				}
+			}
+
+			function pauseEventHandler(){
+				if (PAUSE){
+					controls.enabled = false;
+					paubuttonElement.innerText= 'RESUME';
+					allCubes.visible=false;
+				}
+				if(!PAUSE){
+					controls.enabled = true;
+					paubuttonElement.innerText= 'PAUSE';
+					allCubes.visible=true;
+					creditsdialog.style.display = 'none';
+					isCreditsShown = false;
+				}
+			}
+
+			paubuttonElement.onclick = function(){
+				PAUSE = !PAUSE;
+				pauseEventHandler();
+							}
+			creditsButtonElement.onclick = function(){
+				isCreditsShown = !isCreditsShown;
+				if(isCreditsShown){
+					creditsdialog.style.display = 'block';
+					PAUSE=!PAUSE;
+					pauseEventHandler();
+				}
+
+				if(!isCreditsShown){
+					creditsdialog.style.display = 'none';
+					PAUSE=!PAUSE;
+					pauseEventHandler();
+				}
+			}
+			function handleFileLoad(event) {
+		// A sound has been preloaded.
+		//console.log("Preloaded:", event.id, event.src);
+	}
+}
+
+
+function init_after(){
+	addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+	document.getElementById("score").innerText = "0";
+	document.getElementById("wordlist").innerText='';
+
+	var resbuttonElement = document.getElementById("restartbutton");
+	document.body.appendChild(resbuttonElement);
+	var paubuttonElement = document.getElementById("pausebutton");
+	document.body.appendChild(paubuttonElement);
+			  var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
+			allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
+
+			var smaterial = new THREE.MeshPhongMaterial({
+				map: generateStartTexture()
+			});
+
+			var startcube = new MyGameCube(geom, smaterial);
+
+			var i;
+			for (i = 0; i < 100; i++) { //Generate 100 random cubes
+				var letter = randLetter(); //Get a letter using randLetter function
+
+				//Create a material with texture created by the function defined in CubeTexture.js using the letter as the input
+				var material = new THREE.MeshPhongMaterial({
+					map: generateTexture(letter)
+				});
+
+				//Create a cube with the required attributes using the MyGameCube function defined in MyGameCube.js
+				var cube = new MyGameCube(geom, material);
+
+				cube.position.x = (-Math.random() + 0.5) * 150; //Position of the cube
+				cube.position.y = (-Math.random() + 0.5) * 150;
+				cube.position.z = (-Math.random() + 0.5) * 150;
+
+				cube.rotation.x = 2 * Math.PI * (-Math.random() + 0.5); //Rotation of the cube
+				cube.rotation.y = 2 * Math.PI * (-Math.random() + 0.5);
+				cube.rotation.z = 2 * Math.PI * (-Math.random() + 0.5);
+
+				cube.letter = letter; //Assign the letter to this cube
+				allCubes.add(cube); //Add the cube to allCubes
+			}
+			resbuttonElement.onclick = function(){
+				if(startGame==0){
+					controls.enabled = true;
+					startGame = !startGame;
+					resbuttonElement.style.display = 'none';
+					resbuttonElement.disabled=true;
+					paubuttonElement.style.display = 'block';
+					paubuttonElement.disabled=false;
+					document.getElementById("score1").style.display = 'none';
+					INT = false; word = [];
+					secondscounter=120; minutecounter=2; totalpoints=0;
+					INVALID = 0;
+					init_after();
+					scene.add(allCubes);
+					mytimer = window.setInterval(function(){timer()}, 1000);
+				}
+			}
+		}
+
+		function onDocumentMouseMove(event) {
+			event.preventDefault();
+			//Mouse Position
+			mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
+			mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
+
+			var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5); //Mouse Vector
+			projector.unprojectVector(mousevect, camera); //Unproject mouse vector using camera
+			//Cast a ray from camera position towards mouse position 
+			var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
+			var intersects = raycaster.intersectObjects(allCubes.children); //Get an array of objects that intersect the ray
+
+			allCubes.children.forEach(function(cube) {
+				if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+			}); //Update the color of the cubes 
+
+			if (intersects.length > 0 && !intersects[0].object.isSelected && INVALID==0 && PAUSE==0) {
+
+				intersects[0].object.material.color.setHex(0xC7F464); //Change the color of the nearest intersecting cube
+				mainElement.style.cursor = 'pointer'; //Change the mouse pointer
+				INT = true;
+				intCube = intersects[0].object; //Assign first cube to intCube
+			} else {
+				INT = false;
+				mainElement.style.cursor = 'auto';
+			}
+
+		}
+
+		function onDocumentMouseDown(event) {
+			event.preventDefault();
+			mouse.x = ((event.clientX - renderer.domElement.offsetLeft) / renderer.domElement.width) * 2 - 1;
+			mouse.y = -((event.clientY - renderer.domElement.offsetTop) / renderer.domElement.height) * 2 + 1;
+
+			var mousevect = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+			projector.unprojectVector(mousevect, camera);
+			var raycaster = new THREE.Raycaster(camera.position, mousevect.sub(camera.position).normalize());
+			var intersects = raycaster.intersectObjects(allCubes.children);
+
+			if (intersects.length > 0 && PAUSE==0) {
+				intCube = intersects[0].object;
+				if (!intCube.isSelected) {
+					intersects[0].object.material.color.setHex(0xC44D58); //Change color on Selection
+					intersects[0].object.material.opacity = 1.5;
+					mainElement.style.cursor = 'pointer';
+					INT = false;
+					intCube.isSelected = 1; //Change the selected flag on selection
+					word.push(intCube); //Push the selected cubes to a dynamic array
+				}
+			}
+
+		}
+
+		function onDocumentKeyDown(event) {
+			if (event.keyCode == 90 && startGame==1) { //Keycode for Enter
+				var currentWord = '';
+				var totpot = 0;
+				for (i = 0; i < word.length; i++) {
+					//Extract the letters and points from the selected cubes to create a word and calculate the total points 
+					currentWord = currentWord + word[i].letter;
+					totpot = totpot + word[i].points();
+				}
+				if (dictionary.check(currentWord.toLowerCase()) && currentWord.length>2){
+					for (i = 0; i < word.length; i++) {
+						allCubes.remove(word[i]);
+					}
+					if (currentWord.length>=3 && currentWord.length<=5) totalpoints=totalpoints+totpot*50;
+					else if (currentWord.length>=6 && currentWord.length<=8) totalpoints=totalpoints+totpot*75;
+					else if  (currentWord.length>=9 && currentWord.length<=10) totalpoints=totalpoints+totpot*100;
+					else if (currentWord.length>10) totalpoints=totalpoints+totpot*125
+						addscoretext("score", totalpoints);
+					addword("wordlist",currentWord);
+				//alert("Word:" + currentWord + "  Points:" + totpot); //Show the extracted word and total points
 			}
 			else{
-			for (i = 0; i < word.length; i++) {
-                //Deselect the selected cubes
-                word[i].isSelected = 0;
-            }
+				for (i = 0; i < word.length; i++) {
+					//Deselect the selected cubes
+					word[i].isSelected = 0;
+				}
 
-            while (word.length != 0) {
-                word.pop(); //Reset the dynamic array
-            }
-            allCubes.children.forEach(function(cube) {
-                if (!cube.isSelected) cube.material.color.setHex(0xffffff);
-            }); //Update the color
-			INVALID=1;
-			inv=0;
-			//alert("Invalid Word");
+				while (word.length != 0) {
+					word.pop(); //Reset the dynamic array
+				}
+				allCubes.children.forEach(function(cube) {
+					if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+				}); //Update the color
+				INVALID=1;
+				inv=0;
+				//alert("Invalid Word");
 			}
-            while (word.length != 0) {
-                word.pop(); //Reset the dynamic array
-            }
+			while (word.length != 0) {
+					word.pop(); //Reset the dynamic array
+				}
 
-        }
-		else if (event.keyCode == 82 && startGame==1){
-			camera.position.z = 250;
+			}
+			else if (event.keyCode == 82 && startGame==1){
+				camera.position.z = 250;
 
-			camera.lookAt(new THREE.Vector3(0, 0, 0));		
+				camera.lookAt(new THREE.Vector3(0, 0, 0));		
+			}
+			else if (event.keyCode == 88 && startGame==1) { //Keycode for Backspace
+				for (i = 0; i < word.length; i++) {
+					//Deselect the selected cubes
+					word[i].isSelected = 0;
+				}
+				if(word.length != 0) createjs.Sound.play("knock_Sound");
+				while (word.length != 0) {
+					word.pop(); //Reset the dynamic array
+				}
+				allCubes.children.forEach(function(cube) {
+					if (!cube.isSelected) cube.material.color.setHex(0xffffff);
+				}); //Update the color
+			}
 		}
-        else if (event.keyCode == 88 && startGame==1) { //Keycode for Backspace
-            for (i = 0; i < word.length; i++) {
-                //Deselect the selected cubes
-                word[i].isSelected = 0;
-            }
-			if(word.length != 0) createjs.Sound.play("knock_Sound");
-            while (word.length != 0) {
-                word.pop(); //Reset the dynamic array
-            }
-            allCubes.children.forEach(function(cube) {
-                if (!cube.isSelected) cube.material.color.setHex(0xffffff);
-            }); //Update the color
-        }
-    }
-	
-	function addclocktext(element, text){
-	    var myelement = document.getElementById(element);
-		myelement.innerHTML = "&nbsp;"+text;
-	}
-		function addscoretext(element, text){
-	    var myelement = document.getElementById(element);
-		myelement.innerHTML = "&nbsp;"+text;
-	}
-	function addword(element, text){
-	    var myelement = document.getElementById(element);
-		myelement.innerHTML ="&nbsp;"+text + "\n" + myelement.innerHTML;
-	}
-
-    function onWindowResize() {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-	function timer() {
-	if ((minutecounter!=0 || secondscounter!=0)) 
-	{
-	if (PAUSE==0){
-	if ( (secondscounter%60) == 0) {
-    minutecounter = minutecounter - 1;}
-	secondscounter = secondscounter - 1;
-	addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
-	}
-	}
-	else {
-	while (allCubes.children.length != 0) {
-                allCubes.remove(allCubes.children[allCubes.children.length-1]); //Reset the dynamic array
-            }
-	scene.remove(allCubes);
-	window.clearInterval(mytimer);
-	startGame=0;
-	document.getElementById("restartbutton").style.display = 'block';
-	document.getElementById("restartbutton").disabled = false;
-	document.getElementById("scoreTitle1").style.display = 'block';
-	document.getElementById("score1").style.display = 'block';
-	document.getElementById("score1").innerText = totalpoints;
-	document.getElementById("pausebutton").style.display = 'none';
-	document.getElementById("pausebutton").disabled=true;
-	}
-	}
-	
-	function display(){
-	document.getElementById("clock").style.display = 'block';
-	document.getElementById("wordlist").style.display = 'block';
-	document.getElementById("score").style.display = 'block';
-	document.getElementById("startbutton").style.display = 'block';
-	document.getElementById("startbutton").disabled = false;
-    document.getElementById("help").style.display = 'block';
-    document.getElementById("clockTitle").style.display = 'block';
-    document.getElementById("scoreTitle").style.display = 'block';
-    document.getElementById("wordTitle").style.display = 'block';
-	}
-	
-	
-    function animate() { //Animate function
-
-        requestAnimationFrame(animate);
-
-        render();
-		if (r==102) {
-		display();
-		r=r+1;
-		} 
-        stats.update(); //Update the stats
-
-    }
-
-    function render() {
-        controls.update(); //Update the controls
-        renderer.render(scene, camera); //Render the scene and camera
-		if (r<=100) {
-		textMesh.position.set( 0-0.5*textWidth,30, -700+Math.sqrt(r)*r/1.5 );
-		r=r+1;}
-		if (r==101){
-		if (vib<51){
-		textMesh.position.z += 0.3;
-		vib=vib+1;
-		}
-		if (vib==51) r=r+1}
 		
-        if (INT) { //Rotate the cube on intersection
-            intCube.rotation.x += 0.05;
-            intCube.rotation.y += 0.02;
-            intCube.rotation.z += 0.03;
-        }
-		if (INVALID) {
-		//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
-		if(inv == 0 ){
-			createjs.Sound.play("ahoh_Sound");
+		function addclocktext(element, text){
+			var myelement = document.getElementById(element);
+			myelement.innerHTML = "&nbsp;"+text;
 		}
-		if(inv<15){
-		camera.position.x += 3*Math.cos(2*3.14*inv/15);
-		camera.position.y += 1.5*Math.cos(2*3.14*inv/15);
-        camera.position.z -= 3*Math.cos(2*3.14*inv/15);
+		function addscoretext(element, text){
+			var myelement = document.getElementById(element);
+			myelement.innerHTML = "&nbsp;"+text;
 		}
-		else if(inv<50){
-		    document.getElementById("invalidword").style.display = 'block';
+		function addword(element, text){
+			var myelement = document.getElementById(element);
+			myelement.innerHTML ="&nbsp;"+text + "\n" + myelement.innerHTML;
 		}
-		if(inv==50){
-		INVALID=0;
-		document.getElementById("invalidword").style.display = 'none';
+
+		function onWindowResize() {
+			camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+
+			renderer.setSize(window.innerWidth, window.innerHeight);
 		}
-		inv=inv+1;
+		function timer() {
+			if ((minutecounter!=0 || secondscounter!=0)) 
+			{
+				if (PAUSE==0){
+					if ( (secondscounter%60) == 0) {
+						minutecounter = minutecounter - 1;}
+						secondscounter = secondscounter - 1;
+						addclocktext("clock",minutecounter+":"+((secondscounter%60 < 10) ? ("0" + secondscounter%60) : secondscounter%60));
+					}
+				}
+				else {
+					while (allCubes.children.length != 0) {
+					allCubes.remove(allCubes.children[allCubes.children.length-1]); //Reset the dynamic array
+				}
+				scene.remove(allCubes);
+				window.clearInterval(mytimer);
+				startGame=0;
+				document.getElementById("restartbutton").style.display = 'block';
+				document.getElementById("restartbutton").disabled = false;
+				document.getElementById("score1").style.display = 'block';
+				document.getElementById("score1").innerHTML = "<b>SCORE</b><br>"+totalpoints;
+				document.getElementById("pausebutton").style.display = 'none';
+				document.getElementById("pausebutton").disabled=true;
+			}
 		}
-    }
-    </script>
+		
+		function display(){
+			document.getElementById("clock").style.display = 'block';
+			document.getElementById("wordlist").style.display = 'block';
+			document.getElementById("score").style.display = 'block';
+			document.getElementById("startbutton").style.display = 'block';
+			document.getElementById("startbutton").disabled = false;
+			document.getElementById("help").style.display = 'block';
+			document.getElementById("clockTitle").style.display = 'block';
+			document.getElementById("scoreTitle").style.display = 'block';
+			document.getElementById("wordTitle").style.display = 'block';
+			document.getElementById("creditsbutton").style.display = 'block';
+			document.getElementById("startbutton").disabled = false;
+		}
+		
+		
+		function animate() { //Animate function
+
+			requestAnimationFrame(animate);
+
+			render();
+			if (r==102) {
+				display();
+				r=r+1;
+			} 
+			stats.update(); //Update the stats
+
+		}
+
+		function render() {
+			controls.update(); //Update the controls
+			renderer.render(scene, camera); //Render the scene and camera
+			if (r<=100) {
+				textMesh.position.set( 0-0.5*textWidth,30, -700+Math.sqrt(r)*r/1.5 );
+				r=r+1;}
+				if (r==101){
+					if (vib<51){
+						textMesh.position.z += 0.3;
+						vib=vib+1;
+					}
+					if (vib==51) r=r+1}
+
+			if (INT) { //Rotate the cube on intersection
+				intCube.rotation.x += 0.05;
+				intCube.rotation.y += 0.02;
+				intCube.rotation.z += 0.03;
+			}
+			if (INVALID) {
+			//var x = camera.position.x, y = camera.rotation.y,z= camera.rotation.z;
+			if(inv == 0 ){
+				createjs.Sound.play("ahoh_Sound");
+			}
+			if(inv<15){
+				camera.position.x += 3*Math.cos(2*3.14*inv/15);
+				camera.position.y += 1.5*Math.cos(2*3.14*inv/15);
+				camera.position.z -= 3*Math.cos(2*3.14*inv/15);
+			}
+			else if(inv<50){
+				document.getElementById("invalidword").style.display = 'block';
+			}
+			if(inv==50){
+				INVALID=0;
+				document.getElementById("invalidword").style.display = 'none';
+			}
+			inv=inv+1;
+		}
+	}
+</script>
 
 </body>
 
