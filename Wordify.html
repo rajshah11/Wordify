@@ -124,7 +124,7 @@
 
 		document.getElementById("creditsdialog").style.height = window.innerHeight/4.3+"px"; //Set the height of the main division
 		document.getElementById("creditsdialog").style.width = window.innerWidth/4+"px"; //Set the width of the main division
-		document.getElementById("creditsdialog").style.top = window.innerHeight/2.45+"px"; //Position of the main divison
+		document.getElementById("creditsdialog").style.top = window.innerHeight/2.4+"px"; //Position of the main divison
 		document.getElementById("creditsdialog").style.left = window.innerWidth/2.6+ "px";
 		document.getElementById("creditsdialog").innerHTML = "<br>CREDITS<br><br>This game uses these sounds from freesound:<br>\"<a href='http://freesound.org/people/dermotte/'>o_o.wav</a>\" by dermotte<br>\"<a href='https://www.freesound.org/people/Adam_N/'>pan impact 6.wav</a>\" by Adam_N";
 	</script>
@@ -247,11 +247,6 @@
 			var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
 			allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
 
-			var smaterial = new THREE.MeshPhongMaterial({
-				map: generateStartTexture()
-			});
-
-			var startcube = new MyGameCube(geom, smaterial);
 
 			var i;
 			for (i = 0; i < 100; i++) { //Generate 100 random cubes
@@ -404,11 +399,6 @@ function init_after(){
 			  var geom = new THREE.CubeGeometry(10, 10, 10); //Geometry to create cubes for letters
 			allCubes = new THREE.Object3D(); //3D Object which will have all the cubes
 
-			var smaterial = new THREE.MeshPhongMaterial({
-				map: generateStartTexture()
-			});
-
-			var startcube = new MyGameCube(geom, smaterial);
 
 			var i;
 			for (i = 0; i < 100; i++) { //Generate 100 random cubes
